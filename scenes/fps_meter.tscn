@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl51aq70586jq"]
+
+[ext_resource type="Script" path="res://scripts/FPSMeter.gd" id="1_63r52"]
+
+[node name="fpsMeter" type="Control"]
+layout_mode = 3
+anchor_right = 0.035
+offset_right = -0.32
+offset_bottom = 40.0
+
+[node name="CommandCanvas" type="CanvasLayer" parent="."]
+
+[node name="ChatLog" type="RichTextLabel" parent="CommandCanvas"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="font_label" type="Label" parent="CommandCanvas"]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_63r52")

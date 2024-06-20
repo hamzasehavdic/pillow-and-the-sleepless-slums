@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://di7pgxl801ph3"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_10cj0"]
+[ext_resource type="PackedScene" uid="uid://cgtpukosnq7d7" path="res://scenes/player.tscn" id="1_xpjop"]
+[ext_resource type="PackedScene" uid="uid://bl51aq70586jq" path="res://scenes/fps_meter.tscn" id="3_6k17q"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_nttdj"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_10cj0")
+
+[node name="Player" parent="." instance=ExtResource("1_xpjop")]
+position = Vector2(39, 40)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(33, 34)
+zoom = Vector2(4, 4)
+
+[node name="worldStaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="worldCollisionShape2D" type="CollisionShape2D" parent="worldStaticBody2D"]
+position = Vector2(30, 104)
+shape = SubResource("WorldBoundaryShape2D_nttdj")
+
+[node name="fpsMeter" parent="." instance=ExtResource("3_6k17q")]
