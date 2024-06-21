@@ -1,7 +1,8 @@
-[gd_scene load_steps=25 format=3 uid="uid://cgtpukosnq7d7"]
+[gd_scene load_steps=26 format=3 uid="uid://cgtpukosnq7d7"]
 
 [ext_resource type="Texture2D" uid="uid://daqjkayv0egw3" path="res://assets/sprites/knight.png" id="1_tx3ph"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_vsuc2"]
+[ext_resource type="Script" path="res://scripts/VelocityArrow.gd" id="3_imx0g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nvm18"]
 atlas = ExtResource("1_tx3ph")
@@ -100,7 +101,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Idle",
-"speed": 10.0
+"speed": 8.0
 }, {
 "frames": [],
 "loop": true,
@@ -176,3 +177,7 @@ autoplay = "Idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_6u5g3")
+
+[node name="VelocityArrow" type="Node2D" parent="."]
+script = ExtResource("3_imx0g")
+scale_factor = 0.2

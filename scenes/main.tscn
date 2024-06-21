@@ -10,16 +10,27 @@
 script = ExtResource("1_10cj0")
 
 [node name="Player" parent="." instance=ExtResource("1_xpjop")]
-position = Vector2(39, 40)
+position = Vector2(-1, -125)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(33, 34)
+position = Vector2(0, -66)
 zoom = Vector2(4, 4)
 
 [node name="worldStaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="worldCollisionShape2D" type="CollisionShape2D" parent="worldStaticBody2D"]
-position = Vector2(30, 104)
+position = Vector2(20, 0)
 shape = SubResource("WorldBoundaryShape2D_nttdj")
 
 [node name="fpsMeter" parent="." instance=ExtResource("3_6k17q")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -132.0
+offset_top = -137.0
+offset_right = -132.0
+offset_bottom = -97.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+metadata/_edit_use_anchors_ = true

@@ -3,38 +3,51 @@ extends CharacterBody2D
 
 
 const SPEED: float = 100.0
-const JUMP_VELOCITY: float = -300.0
+const JUMP_VELOCITY: float = -300.0 # goes up according to game 2d plane
+
 
 
 # Get the gravity from the project settings to be synced with RigidBody nodes
 # Why: match player gravity to world gravity
-var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+var gravity: float = 900.0
+# var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 
 func _physics_process(delta):
+	fall_xor_jump("ui_accept", delta)
+	dir_xor_stop("ui_left", "ui_right")
 
-	print("VELOCITY VEC = ", velocity)
-	print("POSITION ", position)
-	
-	# add gravity when airborne
+	#print("VELOCITY VEC= ", velocity)
+	#print("POSITION VEC = ", position)
+	#print("DELTA = ", delta)
+
+	#move_and_slide()	# Abstracts away the need for updating position pty manually
+	#position += velocity	# This handles pos updates (move) but doesnt bring the slide/collision from the prior
+	# Using move_and_slide.
+	move_and_slide()
+
+
+func fall_xor_jump(jump_action_button: String, delta):
+	# add gravity when airborne, increasingly-decreasing the y velocity: ensuring rise and fall
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# handle jump
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	# otherwise, player is on floor/grounded
+	# when so, and jump button pressed, then give max y velocity that depletes and eventually goes down
+	elif Input.is_action_just_pressed(jump_action_button):
+		velocity.y = self.JUMP_VELOCITY
 
+
+func dir_xor_stop(neg_x_dir_button: String, pos_x_dir_button: String):
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions 
 	# with custom gameplay actions.
-	var direction = Input.get_axis("ui_left", "ui_right")
-	print("DIRECTION = ", direction)
+	var direction = Input.get_axis(neg_x_dir_button, pos_x_dir_button)
 	if direction:
-		velocity.x = direction * SPEED * delta
+		velocity.x = direction * self.SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, self.SPEED)
 
-	move_and_slide()
 
 # Custom function to get axis input as an integer
 # Why: Discretize movement, 
