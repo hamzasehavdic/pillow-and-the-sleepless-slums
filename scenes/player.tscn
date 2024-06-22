@@ -166,6 +166,7 @@ animations = [{
 radius = 5.0
 
 [node name="Player" type="CharacterBody2D"]
+collision_layer = 2
 script = ExtResource("1_vsuc2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

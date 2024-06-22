@@ -12,6 +12,8 @@ const JUMP_VELOCITY: float = -300.0 # goes up according to game 2d plane
 var gravity: float = 900.0
 # var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+@onready var coin_count: int = 0
+
 
 func _physics_process(delta):
 	fall_xor_jump("ui_accept", delta)
