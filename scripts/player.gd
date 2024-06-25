@@ -2,94 +2,125 @@ class_name Player
 extends CharacterBody2D
 
 
-const SPEED: float = 100.0
-const JUMP_VELOCITY: float = -300.0 # goes up according to game 2d plane
+enum State { IDLE, MOVING, JUMPING, FALLING, BOOSTED }
 
+var current_state: State = State.IDLE
+var boost_velocity: Vector2 = Vector2.ZERO
+var boost_timer: float = 0.0
+var last_dir: float
 
+@export var gravity: float = 900.0
+@export var move_speed: float = 100.0
+@export var jump_force: float = -300.0
+@export var air_control: float = 1.0
 
-# Get the gravity from the project settings to be synced with RigidBody nodes
-# Why: match player gravity to world gravity
-var gravity: float = 900.0
-# var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
-
+@onready var sprite: AnimatedSprite2D = $"AnimatedSprite2D"
 @onready var coin_count: int = 0
 
 
-func _physics_process(delta):
-	fall_xor_jump("ui_accept", delta)
-	dir_xor_stop("ui_left", "ui_right")
-
-	#print("VELOCITY VEC= ", velocity)
-	#print("POSITION VEC = ", position)
-	#print("DELTA = ", delta)
-
-	#move_and_slide()	# Abstracts away the need for updating position pty manually
-	#position += velocity	# This handles pos updates (move) but doesnt bring the slide/collision from the prior
-	# Using move_and_slide.
-	move_and_slide()
-
-
-func fall_xor_jump(jump_action_button: String, delta):
-	# add gravity when airborne, increasingly-decreasing the y velocity: ensuring rise and fall
-	if not is_on_floor():
-		velocity.y += gravity * delta
-
-	# otherwise, player is on floor/grounded
-	# when so, and jump button pressed, then give max y velocity that depletes and eventually goes down
-	elif Input.is_action_just_pressed(jump_action_button):
-		velocity.y = self.JUMP_VELOCITY
-
-
-func dir_xor_stop(neg_x_dir_button: String, pos_x_dir_button: String):
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions 
-	# with custom gameplay actions.
-	var direction = Input.get_axis(neg_x_dir_button, pos_x_dir_button)
-	if direction:
-		velocity.x = direction * self.SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, self.SPEED)
-
-
-# Custom function to get axis input as an integer
-# Why: Discretize movement, 
-# preventing continous movements via analog stick
-# making stick behave like button
-func get_axis_int(negative_action: String, positive_action: String) -> int:
-	var strength = Input.get_axis(negative_action, positive_action)
-	if strength > 0:
-		return 1
-	elif strength < 0:
-		return -1
-	else:
-		return 0
-
-
-var inventory: Array = []
-var health: int = 100
-
-# Function to add item to inventory (using assertions)
-func add_item_to_inventory(item: Item) -> void:
-	#Assertion to ensure item has a valid name (development-time check)
-	assert(item.name != "", "Item must have a valid name")
-	inventory.append(item)
-	assert(inventory.has(item), "Item must be added to inventory")
-	print("Added %s to inventory" % item.name)
-
-# Function to use item (using try-catch for runtime errors)
-func use_item(item: Item) -> void:
-	# Pre-conditonals before using item
-	if not inventory.has(item):
-		print("Error: Item is not in inventory")
-		return
-	if item.health_boost == 0:
-		print("Item has no health boost value")
-		return
+func _physics_process(delta: float) -> void:
+	print("State: ", current_state, "\nDir: ", "\nVel: ", velocity, "\nVel_b: ", boost_velocity, "\n")
 	
-	# Should have past pre-conditions, now use
-	health += item.health_boost
-	if health > 100:
-		health = 100
-		print("%s used, health is now %d" % [item.name, health])
-	inventory.erase(item)
+	match current_state:
+		State.IDLE:
+			process_idle_state(delta)
+		State.MOVING:
+			process_moving_state(delta)
+		State.JUMPING:
+			process_jumping_state(delta)
+		State.FALLING:
+			process_falling_state(delta)
+		State.BOOSTED:
+			process_boosted_state(delta)
+	
+	move_and_slide()
+	update_state()
+
+
+func process_idle_state(delta: float) -> void:
+	apply_gravity(delta)
+	sprite.flip_h = last_dir < 0
+	sprite.play("Idle")
+
+func process_moving_state(delta: float) -> void:
+	apply_gravity(delta)
+	apply_movement()
+	sprite.flip_h = last_dir < 0
+	sprite.play("Run")
+
+func process_jumping_state(delta: float) -> void:
+	apply_gravity(delta)
+	apply_air_movement()
+
+func process_falling_state(delta: float) -> void:
+	apply_gravity(delta)
+	apply_air_movement()
+	sprite.play("Fall")
+
+func process_boosted_state(delta: float) -> void:
+	boost_timer -= delta
+	if boost_timer <= 0:
+		boost_velocity = Vector2.ZERO
+	else:
+		velocity = boost_velocity
+	sprite.play("Boost")
+
+
+func update_state() -> void:
+	match self.current_state:
+		State.BOOSTED:
+			if boost_velocity == Vector2.ZERO:
+				velocity = Vector2.ZERO
+				current_state = State.FALLING if not is_on_floor() else State.IDLE
+		State.IDLE, State.MOVING:
+			if boost_velocity != Vector2.ZERO:
+				current_state = State.BOOSTED
+			elif not is_on_floor():
+				current_state = State.FALLING
+			elif Input.is_action_just_pressed("jump"):
+				current_state = State.JUMPING
+				velocity.y = jump_force
+			elif Input.get_axis("move_left", "move_right") != 0:
+				current_state = State.MOVING
+			else:
+				current_state = State.IDLE
+		State.JUMPING:
+			if boost_velocity != Vector2.ZERO:
+				current_state = State.BOOSTED
+			elif velocity.y > 0:
+				current_state = State.FALLING
+			elif is_on_floor(): # handle landing... you can land on plat if youre still in jump
+				land()
+		State.FALLING:
+			if boost_velocity != Vector2.ZERO:
+				current_state = State.BOOSTED
+			elif is_on_floor(): # handle landing
+				land()
+
+func apply_gravity(delta: float) -> void:
+	self.velocity.y += gravity * delta
+
+func apply_movement() -> void:
+	var input_dir = Input.get_axis("move_left", "move_right")
+	self.velocity.x = input_dir * self.move_speed
+	if input_dir != 0:
+		self.last_dir = input_dir 
+
+func apply_air_movement() -> void:
+	var input_dir = Input.get_axis("move_left", "move_right")
+	self.velocity.x = input_dir * self.move_speed * self.air_control
+
+func apply_boost(boost_vel: Vector2, boost_duration: float) -> void:
+	self.boost_velocity = boost_vel
+	self.boost_timer = boost_duration
+	self.current_state = State.BOOSTED
+
+
+func land():
+	self.velocity.x = 0
+	self.current_state = State.MOVING if Input.get_axis("move_left", "move_right") != 0 else State.IDLE 
+
+
+func increment_coin_count():
+	self.coin_count += 1
 

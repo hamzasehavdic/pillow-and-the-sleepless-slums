@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bedelaeb0ay3x"]
+
+[ext_resource type="Script" path="res://scripts/fps_label.gd" id="1_xhjub"]
+
+[node name="data_hud" type="Control"]
+layout_mode = 3
+anchor_right = 0.371
+anchor_bottom = 0.285
+offset_right = -0.320034
+offset_bottom = -144.68
+
+[node name="CommandCanvas" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CommandCanvas"]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_xhjub")

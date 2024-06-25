@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://ckq5c05nt71n6"]
+
+[ext_resource type="Texture2D" uid="uid://bvcv3tpy6knq5" path="res://assets/sprites/lamp3.png" id="1_5ji33"]
+[ext_resource type="Script" path="res://scripts/lamp.gd" id="1_ujt7p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v0m35"]
+size = Vector2(16, 52)
+
+[sub_resource type="Gradient" id="Gradient_2kegb"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o36jt"]
+gradient = SubResource("Gradient_2kegb")
+fill = 1
+fill_from = Vector2(0.501424, 0.475783)
+fill_to = Vector2(0.817664, 0.843305)
+
+[node name="Lamp" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_ujt7p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(4, -30)
+texture = ExtResource("1_5ji33")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(5, -27)
+shape = SubResource("RectangleShape2D_v0m35")
+debug_color = Color(0.247059, 0.635294, 0, 0.419608)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(14, -47)
+scale = Vector2(17.4107, 19.1964)
+energy = 3.0
+range_z_min = -4096
+range_z_max = 4086
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_o36jt")
+offset = Vector2(2.08165e-12, 2.08165e-12)
+texture_scale = 0.07
+height = 30.0
+
+[connection signal="body_entered" from="." to="." method="_on_player_entered"]

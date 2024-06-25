@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://ce4w5rsnuu26c"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_4j0ty"]
+
+[sub_resource type="Environment" id="Environment_o04qg"]
+background_mode = 3
+adjustment_enabled = true
+adjustment_brightness = 0.1
+adjustment_color_correction = SubResource("CanvasTexture_4j0ty")
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_o04qg")

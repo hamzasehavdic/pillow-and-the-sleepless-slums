@@ -1,11 +1,10 @@
 extends Node2D
 
-# Make its own scene to reuse for NPC characters
 
-@export var line_width: float = 2.0
-@export var scale_factor: float = 0.1
 var line_color: Color
-@onready var character_body = get_parent()
+@onready var parent = get_parent()
+@export var line_width: float = 2.0
+@export var scale_factor: float = 0.1 
 
 
 func _process(_delta):
@@ -13,14 +12,19 @@ func _process(_delta):
 
 
 func _draw(): # Override draw functionality
-	if character_body is CharacterBody2D: # Safety Check
-		var velocity = character_body.velocity
-		var end_point = velocity * scale_factor
-		
-		if character_body.is_on_floor():
+	if parent is Player: # Safety Check
+		if parent.is_on_floor():
 			line_color = Color.GREEN
 		else: 
 			line_color = Color.RED
+	elif parent is Booster:
+		line_color = Color.PURPLE
+		var booster: Booster = parent
+		scale_factor = booster.boost_duration
+	else:
+		line_color = Color.BLUE
 
-		draw_line(Vector2.ZERO, end_point, line_color, line_width)
+	var velocity = parent.velocity
+	var end_point = velocity * scale_factor
+	draw_line(Vector2.ZERO, end_point, line_color, line_width)
 

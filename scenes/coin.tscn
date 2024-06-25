@@ -96,20 +96,18 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8xtr4"]
-radius = 4.0
+radius = 6.0
 
 [node name="Coin" type="Area2D"]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_unroi")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="CoinAnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_homli")
 autoplay = "default"
 frame = 11
 frame_progress = 0.778578
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CoinCollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_8xtr4")
-
-[connection signal="body_entered" from="." to="." method="_on_player_entered"]

@@ -1,0 +1,121 @@
+[gd_scene load_steps=16 format=3 uid="uid://bhjpwc6vo44wt"]
+
+[ext_resource type="Script" path="res://scripts/enemy_patroller.gd" id="1_612ku"]
+[ext_resource type="Texture2D" uid="uid://bo3dwobo83ecm" path="res://assets/sprites/slime_green.png" id="2_xfkdl"]
+[ext_resource type="PackedScene" uid="uid://cfnbg7exdibmq" path="res://scenes/kill_area.tscn" id="3_ia7e2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r2rm1"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2q1v"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s6njo"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7jaqb"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fi276"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pnier"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xfeby"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xodcl"]
+atlas = ExtResource("2_xfkdl")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jspr2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r2rm1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2q1v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s6njo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7jaqb")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_fi276")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_pnier")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_xfeby")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_xodcl")
+}],
+"loop": false,
+"name": &"wakeup",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k1ein"]
+size = Vector2(16, 16)
+
+[sub_resource type="Gradient" id="Gradient_7y3va"]
+offsets = PackedFloat32Array(0, 0.837778)
+colors = PackedColorArray(0.942222, 0.942222, 0.942222, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_phb62"]
+gradient = SubResource("Gradient_7y3va")
+fill = 1
+fill_from = Vector2(0.509971, 0.495726)
+fill_to = Vector2(0.920228, 0.119658)
+
+[node name="EnemyPatroller" type="Node2D"]
+script = ExtResource("1_612ku")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.443137, 0.443137, 0.443137, 1)
+self_modulate = Color(1, 1, 1, 0.8)
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_jspr2")
+animation = &"idle"
+metadata/_edit_lock_ = true
+
+[node name="KillArea" parent="." instance=ExtResource("3_ia7e2")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea"]
+visible = false
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_k1ein")
+debug_color = Color(1, 0.0117647, 0.027451, 0.419608)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2(0, -8)
+target_position = Vector2(13, 0)
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(-1.42109e-14, -7)
+scale = Vector2(5.9375, 5.24357)
+energy = 5.0
+texture = SubResource("GradientTexture2D_phb62")
+offset = Vector2(2.08165e-12, 2.08165e-12)
+texture_scale = 0.1
+height = 10.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_wakeup_animation_finished"]

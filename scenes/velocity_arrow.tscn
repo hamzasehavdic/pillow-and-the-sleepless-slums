@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://7cegckrxmuv0"]
+
+[ext_resource type="Script" path="res://scripts/VelocityArrow.gd" id="1_07f6e"]
+
+[node name="VelocityArrow" type="Node2D"]
+position = Vector2(2.08165e-12, 2.08165e-12)
+script = ExtResource("1_07f6e")
+scale_factor = 0.2
