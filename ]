@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 
-enum State { IDLE, MOVING, JUMPING, FALLING, BOOSTED, DEATH }
+enum State { IDLE, MOVING, JUMPING, FALLING, BOOSTED }
 
 var current_state: State = State.IDLE
 var boost_velocity: Vector2 = Vector2.ZERO
@@ -37,8 +37,6 @@ func _physics_process(delta: float) -> void:
 			process_falling_state(delta)
 		State.BOOSTED:
 			process_boosted_state(delta)
-		State.DEATH:
-			process_death_state()
 	
 	move_and_slide()
 	update_state()
@@ -59,6 +57,9 @@ func process_jumping_state(delta: float) -> void:
 	apply_gravity(delta)
 	apply_air_movement()
 	sprite.play("Jump")
+	sound_player.stream = jump_sound
+	if not sound_player.is_playing():
+		sound_player.play()
 
 func process_falling_state(delta: float) -> void:
 	apply_gravity(delta)
@@ -73,13 +74,9 @@ func process_boosted_state(delta: float) -> void:
 		velocity = boost_velocity
 	sprite.play("Boost")
 
-func process_death_state() -> void:
-	sound_player.stream = hurt_sound
-	sound_player.play()
-
 
 func update_state() -> void:
-	match current_state:
+	match self.current_state:
 		State.BOOSTED:
 			if boost_velocity == Vector2.ZERO:
 				velocity = Vector2.ZERO
@@ -92,8 +89,6 @@ func update_state() -> void:
 			elif Input.is_action_just_pressed("jump"):
 				current_state = State.JUMPING
 				velocity.y = jump_force
-				sound_player.stream = jump_sound
-				sound_player.play()
 			elif Input.get_axis("move_left", "move_right") != 0:
 				current_state = State.MOVING
 			else:

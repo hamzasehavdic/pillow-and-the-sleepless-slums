@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://cgtpukosnq7d7"]
+[gd_scene load_steps=42 format=3 uid="uid://cgtpukosnq7d7"]
 
 [ext_resource type="Texture2D" uid="uid://daqjkayv0egw3" path="res://assets/sprites/knight.png" id="1_tx3ph"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_vsuc2"]
@@ -39,6 +39,10 @@ region = Rect2(64, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_siuc1"]
 atlas = ExtResource("1_tx3ph")
 region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4f0v"]
+atlas = ExtResource("1_tx3ph")
+region = Rect2(0, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sxpek"]
 atlas = ExtResource("1_tx3ph")
@@ -182,6 +186,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_q4f0v")
+}],
+"loop": true,
+"name": &"Jump",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_sxpek")
 }, {
 "duration": 1.0,
@@ -280,11 +292,10 @@ script = ExtResource("1_vsuc2")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_s7omb")
-animation = &"Fall"
+animation = &"Jump"
 autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(0, -8)
 shape = SubResource("CircleShape2D_6u5g3")
 
@@ -295,3 +306,5 @@ occluder = SubResource("OccluderPolygon2D_48acj")
 occluder = SubResource("OccluderPolygon2D_tfyl7")
 
 [node name="VelocityArrow" parent="." instance=ExtResource("3_atjuv")]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

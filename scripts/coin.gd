@@ -1,6 +1,15 @@
 class_name Coin
 extends Area2D
 
+
+@onready var sound_player: AudioStreamPlayer2D = $CoinAudio
+@export var coin_sound: AudioStream
+
+func _ready():
+	sound_player.stream = coin_sound
+
+
+
 signal collected(collector)
 
 
@@ -16,7 +25,6 @@ func check_for_collision():
 	var query = PhysicsShapeQueryParameters2D.new()
 
 	query.set_shape($CoinCollisionShape2D.shape)
-
 
 	query.transform = global_transform
 
@@ -44,4 +52,10 @@ func check_for_collision():
 
 func on_collected(collector: Player):
 	collector.increment_coin_count()
+	if not sound_player.playing:
+		sound_player.play()
+	self.hide() # hide until sound finished; then free
+
+
+func _on_coin_audio_finished():
 	queue_free()

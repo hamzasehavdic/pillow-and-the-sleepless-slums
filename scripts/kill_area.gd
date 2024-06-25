@@ -4,9 +4,12 @@ extends Area2D
 @export var blastoff_magnitude = 50
 
 func _on_body_entered(body: Player):
+	body.process_death_state()
+
 	body.get_child(0).modulate = Color.RED
 	
 	if get_parent().is_in_group("Enemies"):
+		# TODO fix this to be away from enemy not towards enemy facing dir
 		var enemy_dir = get_parent().dir
 		body.rotate(enemy_dir * PI/8)
 	
