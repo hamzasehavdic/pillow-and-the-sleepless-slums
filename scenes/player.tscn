@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://cgtpukosnq7d7"]
+[gd_scene load_steps=41 format=3 uid="uid://cgtpukosnq7d7"]
 
 [ext_resource type="Texture2D" uid="uid://daqjkayv0egw3" path="res://assets/sprites/knight.png" id="1_tx3ph"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_vsuc2"]
@@ -19,6 +19,10 @@ region = Rect2(128, 160, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_6w2w8"]
 atlas = ExtResource("1_tx3ph")
 region = Rect2(160, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nn26x"]
+atlas = ExtResource("1_tx3ph")
+region = Rect2(96, 224, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cnvnk"]
 atlas = ExtResource("1_tx3ph")
@@ -157,7 +161,15 @@ animations = [{
 }],
 "loop": true,
 "name": &"Boost",
-"speed": 10.0
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nn26x")
+}],
+"loop": true,
+"name": &"Dash",
+"speed": 1.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -219,7 +231,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Roll",
-"speed": 10.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -272,17 +284,11 @@ animations = [{
 }],
 "loop": true,
 "name": &"Run",
-"speed": 10.0
+"speed": 15.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6u5g3"]
-radius = 7.0
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_48acj"]
-polygon = PackedVector2Array(0, -5, 5, -5, 5, -2, 4, 0, 1, 0, 1, -2, 0, -2)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_tfyl7"]
-polygon = PackedVector2Array(-5, -8, -2, -6, 4, -6, 5, -5, 6, -8, 4, -9, 0, -9, -4, -8)
+radius = 5.0
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -292,19 +298,19 @@ script = ExtResource("1_vsuc2")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_s7omb")
-animation = &"Jump"
-autoplay = "Idle"
+animation = &"Fall"
+autoplay = "Fall"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
 shape = SubResource("CircleShape2D_6u5g3")
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-occluder = SubResource("OccluderPolygon2D_48acj")
-
-[node name="LightOccluder2D2" type="LightOccluder2D" parent="."]
-occluder = SubResource("OccluderPolygon2D_tfyl7")
-
 [node name="VelocityArrow" parent="." instance=ExtResource("3_atjuv")]
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]

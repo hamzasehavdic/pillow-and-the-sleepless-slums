@@ -18,6 +18,10 @@ func _physics_process(_delta):
 
 
 func check_for_collision():
+	## An implementation of collision checks.
+	##
+	## To better understand how objects are detected in area space
+
 	#var start_time = Time.get_ticks_usec()
 
 	var space_state = get_world_2d().direct_space_state

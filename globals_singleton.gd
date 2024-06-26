@@ -8,9 +8,5 @@ func increase_score(amount):
 	player_score += amount
 
 func _ready():
-	Engine.max_fps = 60
-	player_score = 0
-	game_settings = {
-		"volume": 50,
-		"difficulty": "normal"
-	}
+	Engine.set_max_fps(60)
+	Engine.set_physics_ticks_per_second(60)
