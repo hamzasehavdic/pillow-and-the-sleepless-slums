@@ -1,0 +1,5 @@
+extends Resource
+class_name DialogEntry
+
+var dialog_text: String = ""
+var dialog_wav_file: AudioStream = null

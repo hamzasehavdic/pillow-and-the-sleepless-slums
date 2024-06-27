@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://d03a58dln3x2v"]
+
+[ext_resource type="Script" path="res://scripts/npc.gd" id="1_yakkh"]
+[ext_resource type="Texture2D" uid="uid://di8v6oiyco7h6" path="res://assets/sprites/guardian_0.png" id="2_ooy26"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5mpj0"]
+size = Vector2(109, 39)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_c1ept"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_6716c"]
+font_size = 10
+font_color = Color(0, 0, 0, 1)
+
+[node name="NPC" type="Node2D"]
+z_index = 2
+script = ExtResource("1_yakkh")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -17.5)
+shape = SubResource("RectangleShape2D_5mpj0")
+debug_color = Color(0.243137, 0.635294, 0, 0.419608)
+
+[node name="NPCSprite" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.8)
+position = Vector2(0, -8)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ooy26")
+
+[node name="InteractionDisplayBox" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.6)
+offset_left = -49.0
+offset_top = 2.0
+offset_right = 49.0
+offset_bottom = 23.0
+texture = SubResource("CanvasTexture_c1ept")
+
+[node name="InteractionLabel" type="Label" parent="InteractionDisplayBox"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.5
+offset_top = -8.5
+offset_right = 46.5
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Press 't' to interact"
+label_settings = SubResource("LabelSettings_6716c")

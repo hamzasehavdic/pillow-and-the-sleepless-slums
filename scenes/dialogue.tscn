@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkoeke5h0oa6r"]
+
+[ext_resource type="Script" path="res://scripts/Dialogue.gd" id="1_2xyxx"]
+
+[node name="Dialogue" type="Node2D"]
+script = ExtResource("1_2xyxx")
+dialog_lines = Array[Object]([])
+
+[node name="DialogStreamPlayer" type="AudioStreamPlayer2D" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="TextureRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
