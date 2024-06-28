@@ -1,16 +1,21 @@
-class_name GameManager
 extends Node
 
-var player_score: int
-var game_settings: Dictionary
+@export var initial_coin_count: int = 0
+@export var max_fps: int = 60
+@export var physics_ticks_per_second: int = 60
 
+var player_coin_count: int
 
-func increase_score(amount):
-	player_score += amount
 
 func _init():
-	self.player_score = 0
+	player_coin_count = initial_coin_count
 
 func _ready():
-	Engine.set_max_fps(60)
-	Engine.set_physics_ticks_per_second(60)
+	Engine.max_fps = max_fps
+	Engine.physics_ticks_per_second = physics_ticks_per_second
+
+func increment_coin_count():
+	player_coin_count += 1
+
+func reset_coin_count():
+	player_coin_count = initial_coin_count

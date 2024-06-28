@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalsSingleton="*res://globals_singleton.gd"
+GameManager="*res://scripts/game_manager.gd"
 
 [editor_plugins]
 

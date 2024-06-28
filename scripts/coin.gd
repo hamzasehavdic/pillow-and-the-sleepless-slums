@@ -9,10 +9,6 @@ func _ready():
 	sound_player.stream = coin_sound
 
 
-
-signal collected(collector)
-
-
 func _physics_process(_delta):
 	check_for_collision()
 
@@ -48,18 +44,14 @@ func check_for_collision():
 		#if collider.is_in_group("Player"): # group membership lookup, slow but flex
 		#if (self.collision_mask == collider.collision_layer): # mask and layer approach
 		if collider is Player: # direct type check approach
-			on_collected(collider)
+			sound_player.play()
+			self.hide()
 
 	#var end_time = Time.get_ticks_usec()
 	#print(end_time - start_time / 1000.0)
 
 
-func on_collected(_collector: Player):
-	$GameManager.increment_coin_count()
-	if not sound_player.playing:
-		sound_player.play()
-	self.hide() # hide until sound finished; then free
-
 
 func _on_coin_audio_finished():
+	GameManager.increment_coin_count()
 	queue_free()

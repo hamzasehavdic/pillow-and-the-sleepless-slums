@@ -1,8 +1,8 @@
-[gd_scene load_steps=30 format=3 uid="uid://di7pgxl801ph3"]
+[gd_scene load_steps=31 format=3 uid="uid://di7pgxl801ph3"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_10cj0"]
 [ext_resource type="PackedScene" uid="uid://cgtpukosnq7d7" path="res://scenes/player.tscn" id="1_xpjop"]
 [ext_resource type="PackedScene" uid="uid://bedelaeb0ay3x" path="res://scenes/data_hud.tscn" id="2_qn0i2"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_xf8bc"]
 [ext_resource type="PackedScene" uid="uid://c25bc1aby774p" path="res://scenes/pillow.tscn" id="4_ch07w"]
 [ext_resource type="Texture2D" uid="uid://rj4ffq8k2if0" path="res://assets/sprites/world_tileset.png" id="4_edqr4"]
 [ext_resource type="PackedScene" uid="uid://dqhhopjcqdrp0" path="res://scenes/platform.tscn" id="4_n3fo2"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://d2yl0iixi1gkw" path="res://scenes/booster.tscn" id="11_frkbm"]
 [ext_resource type="Texture2D" uid="uid://8nfusjvvv1u3" path="res://assets/images/bg_02.jpg" id="12_v2t4w"]
 [ext_resource type="PackedScene" uid="uid://d03a58dln3x2v" path="res://scenes/npc.tscn" id="13_kjt70"]
+[ext_resource type="AudioStream" uid="uid://c7map0wf6nt5o" path="res://assets/sounds/music/respite_bgm.mp3" id="16_yoh27"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_rkcyn"]
 polygon = PackedVector2Array(5.83715, -5.61865, 8, -8, 8, 8, 5.96201, 5.9308, -5.83715, 5.99323, -8, 8, -8, -8, -5.83715, -5.74351)
@@ -508,9 +509,10 @@ _data = {
 distance = -48.0
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_10cj0")
+position = Vector2(1, 0)
 
 [node name="GameManager" type="Node" parent="."]
+script = ExtResource("2_xf8bc")
 
 [node name="MainTileMap" type="TileMap" parent="."]
 position = Vector2(-1, 0)
@@ -566,7 +568,7 @@ size_flags_horizontal = 0
 [node name="Coins" type="Node" parent="."]
 
 [node name="Coin0" parent="Coins" instance=ExtResource("6_lvvct")]
-position = Vector2(68, -183)
+position = Vector2(1, 0)
 
 [node name="Coin1" parent="Coins" instance=ExtResource("6_lvvct")]
 position = Vector2(-33, 53)
@@ -689,11 +691,13 @@ scale = Vector2(1.01871, 0.970927)
 energy = 0.1
 shadow_enabled = true
 
-[node name="Boosters" type="Node" parent="."]
-
 [node name="NPCs" type="Node" parent="."]
 
 [node name="NPC" parent="NPCs" instance=ExtResource("13_kjt70")]
 position = Vector2(63, -46)
+
+[node name="GameMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_yoh27")
+autoplay = true
 
 [connection signal="turnoff_effect" from="Platforms/MovingPlatform/Lamp" to="Enemies" method="_on_lamp_turnoff_effect"]

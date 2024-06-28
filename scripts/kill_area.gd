@@ -33,4 +33,5 @@ func _on_timer_timeout():
 	# Get the tree of nodes this kill area is in
 	# Then reloads the entire scene (Main)
 	Engine.time_scale = 1.0
+	GameManager.reset_coin_count()
 	get_tree().reload_current_scene()

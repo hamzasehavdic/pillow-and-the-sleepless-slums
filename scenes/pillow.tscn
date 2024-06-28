@@ -269,4 +269,4 @@ position = Vector2(0, -90)
 sprite_frames = SubResource("SpriteFrames_b8cym")
 animation = &"walk"
 autoplay = "walk"
-frame_progress = 0.274769
+frame_progress = 0.641713
