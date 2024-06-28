@@ -14,4 +14,4 @@ func _ready():
 func _process(_delta):
 	var fps = Engine.get_frames_per_second()
 	self.text = "FPS: " + str(fps)\
-			+ "\nCoins: " + str($"../../../..".coin_count)
+		+ "\nCoins: " + str($GameManager.player_coin_count)

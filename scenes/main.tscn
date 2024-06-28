@@ -510,6 +510,8 @@ distance = -48.0
 [node name="Main" type="Node2D"]
 script = ExtResource("1_10cj0")
 
+[node name="GameManager" type="Node" parent="."]
+
 [node name="MainTileMap" type="TileMap" parent="."]
 position = Vector2(-1, 0)
 scale = Vector2(1, 0.991358)
@@ -645,7 +647,7 @@ position = Vector2(-391, 127)
 metadata/_edit_lock_ = true
 
 [node name="EnemyPatroller3" parent="Enemies" instance=ExtResource("8_ysd2e")]
-position = Vector2(-187, 127)
+position = Vector2(-1, 0)
 
 [node name="EnemyPatroller4" parent="Enemies" instance=ExtResource("8_ysd2e")]
 position = Vector2(-339, 78)
@@ -692,6 +694,6 @@ shadow_enabled = true
 [node name="NPCs" type="Node" parent="."]
 
 [node name="NPC" parent="NPCs" instance=ExtResource("13_kjt70")]
-position = Vector2(63, -45)
+position = Vector2(63, -46)
 
 [connection signal="turnoff_effect" from="Platforms/MovingPlatform/Lamp" to="Enemies" method="_on_lamp_turnoff_effect"]

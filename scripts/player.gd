@@ -4,26 +4,45 @@ extends CharacterBody2D
 
 enum State { IDLE, MOVING, JUMPING, FALLING, BOOSTED, DASHING, DEATH }
 
-var current_state: State = State.FALLING
-var boost_velocity: Vector2 = Vector2.ZERO
-var boost_timer: float = 0.0
-@onready var last_dir: float = 1.0
+# (Independent) Member variables
+var current_state: State
+var boost_velocity: Vector2
+var boost_timer: float
+var last_dir: float
+var can_air_dash: bool
 
-@export var gravity: float = 900.0
-@export var move_speed: float = 100.0
-@export var jump_force: float = -300.0
-@onready var dash_timer: Timer = $DashTimer
-@export var dash_speed: float = 275.0
-var can_air_dash: bool = false
+# Constants
+const GRAVITY: float = 900.0
+const MOVE_SPEED: float = 100.0
+const JUMP_FORCE: float = -300.0
+const DASH_SPEED: float = 275.0
 
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var coin_count: int = 0
-
-# SOUNDS
-@onready var sound_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+# Exported variables
 @export var jump_sound: AudioStream = preload("res://assets/sounds/jump_1.wav")
 @export var hurt_sound: AudioStream = preload("res://assets/sounds/hurt.wav")
 @export var dash_sound: AudioStream = preload("res://assets/sounds/balloon_pop.wav")
+
+
+# Dependent Node refs (to Nodes composed in/relate to Player)
+var dash_timer: Timer
+var sprite: AnimatedSprite2D
+var sound_player: AudioStreamPlayer2D
+
+
+func _init():
+	# Init any vars independent from scene tree
+	current_state = State.FALLING
+	boost_velocity = Vector2.ZERO
+	boost_timer = 0.0
+	last_dir = 1.0
+	can_air_dash = false
+
+
+func _ready():
+	# Init node refs & vars dependent on the scene tree
+	dash_timer = $DashTimer
+	sprite = $AnimatedSprite2D
+	sound_player = $AudioStreamPlayer2D
 
 
 func _physics_process(delta: float) -> void:
@@ -62,12 +81,12 @@ func process_moving_state(delta: float) -> void:
 
 func process_jumping_state(delta: float) -> void:
 	apply_gravity(delta)
-	apply_air_movement(1.1)
+	apply_air_movement(1.3) # accel vel in jump
 	sprite.play("Jump")
 
 func process_falling_state(delta: float) -> void:
 	apply_gravity(delta)
-	apply_air_movement(0.4)
+	apply_air_movement(0.8) # de-accel vel in fall
 	sprite.play("Fall")
 
 func process_boosted_state(delta: float) -> void:
@@ -112,7 +131,7 @@ func transition_state() -> void:
 
 			elif Input.is_action_just_pressed("jump"):
 				current_state = State.JUMPING
-				velocity.y = jump_force
+				velocity.y = JUMP_FORCE
 				play_sound(jump_sound)
 
 			elif Input.get_axis("move_left", "move_right") != 0:
@@ -138,21 +157,21 @@ func transition_state() -> void:
 func apply_gravity(delta: float) -> void:
 	# Option 1: Varying rise and fall speed
 	#var fall_mult: float = 1.0 if current_state == State.JUMPING else 1.3
-	#velocity.y += gravity * delta * fall_mult
+	#velocity.y += GRAVITY * delta * fall_mult
 
 	# Option 2: Same rise and fall speed
-	velocity.y += gravity * delta
+	velocity.y += GRAVITY * delta
 
 func apply_movement() -> void:
 	var input_dir = Input.get_axis("move_left", "move_right")
-	velocity.x = input_dir * move_speed
+	velocity.x = input_dir * MOVE_SPEED
 	if input_dir != 0:
 		last_dir = input_dir 
 
 
 func apply_air_movement(air_control: float) -> void:
 	var input_dir = Input.get_axis("move_left", "move_right")
-	velocity.x = input_dir * move_speed * air_control 
+	velocity.x = input_dir * MOVE_SPEED * air_control 
 
 
 func apply_boost(boost_vel: Vector2, boost_duration: float) -> void:
@@ -162,8 +181,8 @@ func apply_boost(boost_vel: Vector2, boost_duration: float) -> void:
 
 
 func apply_dash() -> void:
-	velocity = Vector2(last_dir * dash_speed, 0) # slight offset upwards
-	#velocity.x = last_dir * dash_speed
+	velocity = Vector2(last_dir * DASH_SPEED, 0) # slight offset upwards
+	#velocity.x = last_dir * DASH_SPEED
 
 func start_dash() -> void:
 	current_state = State.DASHING # Prevent transitions
@@ -179,10 +198,6 @@ func land():
 	else:
 		current_state = State.IDLE 
 	can_air_dash = true # Reset air dash
-
-
-func increment_coin_count():
-	coin_count += 1
 
 
 func _on_dash_timer_timeout():

@@ -2,15 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/npc.gd" id="1_yakkh"]
 [ext_resource type="Texture2D" uid="uid://di8v6oiyco7h6" path="res://assets/sprites/guardian_0.png" id="2_ooy26"]
+[ext_resource type="FontFile" uid="uid://btmdfel31hrn" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_o0lc8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5mpj0"]
 size = Vector2(109, 39)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_c1ept"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_6716c"]
-font_size = 10
-font_color = Color(0, 0, 0, 1)
 
 [node name="NPC" type="Node2D"]
 z_index = 2
@@ -32,11 +29,15 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_ooy26")
 
 [node name="InteractionDisplayBox" type="TextureRect" parent="."]
-self_modulate = Color(1, 1, 1, 0.6)
-offset_left = -49.0
+self_modulate = Color(1, 1, 1, 0.5)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.0
 offset_top = 2.0
-offset_right = 49.0
+offset_right = 78.0
 offset_bottom = 23.0
+grow_horizontal = 2
 texture = SubResource("CanvasTexture_c1ept")
 
 [node name="InteractionLabel" type="Label" parent="InteractionDisplayBox"]
@@ -46,11 +47,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -46.5
-offset_top = -8.5
-offset_right = 46.5
-offset_bottom = 8.5
+offset_left = -64.0
+offset_top = -5.5
+offset_right = 64.0
+offset_bottom = 5.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.1)
+theme_override_fonts/font = ExtResource("3_o0lc8")
+theme_override_font_sizes/font_size = 8
 text = "Press 't' to interact"
-label_settings = SubResource("LabelSettings_6716c")

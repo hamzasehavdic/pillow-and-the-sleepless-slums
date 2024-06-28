@@ -54,8 +54,8 @@ func check_for_collision():
 	#print(end_time - start_time / 1000.0)
 
 
-func on_collected(collector: Player):
-	collector.increment_coin_count()
+func on_collected(_collector: Player):
+	$GameManager.increment_coin_count()
 	if not sound_player.playing:
 		sound_player.play()
 	self.hide() # hide until sound finished; then free
