@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bu70w4bkvlboe"
-path="res://.godot/imported/pillow_walk.png-394a2cbc8613963b73bfde66b32776ae.ctex"
+uid="uid://smc1ad3hfmu6"
+path="res://.godot/imported/pillow_jump_001.png-547f1c83b12537aa335a233deb2ef6e6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/pillow_walk.png"
-dest_files=["res://.godot/imported/pillow_walk.png-394a2cbc8613963b73bfde66b32776ae.ctex"]
+source_file="res://assets/sprites/pillow_jump_001.png"
+dest_files=["res://.godot/imported/pillow_jump_001.png-547f1c83b12537aa335a233deb2ef6e6.ctex"]
 
 [params]
 

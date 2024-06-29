@@ -1,9 +1,8 @@
-[gd_scene load_steps=31 format=3 uid="uid://di7pgxl801ph3"]
+[gd_scene load_steps=30 format=3 uid="uid://di7pgxl801ph3"]
 
 [ext_resource type="PackedScene" uid="uid://cgtpukosnq7d7" path="res://scenes/player.tscn" id="1_xpjop"]
 [ext_resource type="PackedScene" uid="uid://bedelaeb0ay3x" path="res://scenes/data_hud.tscn" id="2_qn0i2"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="2_xf8bc"]
-[ext_resource type="PackedScene" uid="uid://c25bc1aby774p" path="res://scenes/pillow.tscn" id="4_ch07w"]
 [ext_resource type="Texture2D" uid="uid://rj4ffq8k2if0" path="res://assets/sprites/world_tileset.png" id="4_edqr4"]
 [ext_resource type="PackedScene" uid="uid://dqhhopjcqdrp0" path="res://scenes/platform.tscn" id="4_n3fo2"]
 [ext_resource type="PackedScene" uid="uid://mbpj38a0gmm" path="res://scenes/coin.tscn" id="6_lvvct"]
@@ -542,9 +541,6 @@ position = Vector2(158, -141)
 scale = Vector2(0.709591, 0.709591)
 texture = ExtResource("12_v2t4w")
 
-[node name="Node2D" parent="Background" instance=ExtResource("4_ch07w")]
-position = Vector2(-424.188, 116.969)
-
 [node name="Player" parent="." instance=ExtResource("1_xpjop")]
 z_index = 3
 position = Vector2(18, -127)
@@ -618,12 +614,14 @@ metadata/_edit_lock_ = true
 [node name="MovingPlatform" parent="Platforms" instance=ExtResource("4_n3fo2")]
 position = Vector2(-434, 135)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Platforms/MovingPlatform"]
+[node name="MovingPlatformAnimationPlayer" type="AnimationPlayer" parent="Platforms/MovingPlatform"]
+unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_ke8yv")
 }
 
 [node name="Lamp" parent="Platforms/MovingPlatform" instance=ExtResource("9_axj1e")]
+unique_name_in_owner = true
 position = Vector2(0, -4)
 
 [node name="KillArea" parent="." instance=ExtResource("7_0uhny")]
@@ -699,5 +697,3 @@ position = Vector2(63, -46)
 [node name="GameMusic" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("16_yoh27")
 autoplay = true
-
-[connection signal="turnoff_effect" from="Platforms/MovingPlatform/Lamp" to="Enemies" method="_on_lamp_turnoff_effect"]

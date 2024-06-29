@@ -1,4 +1,3 @@
-class_name KillArea
 extends Area2D
 
 
@@ -6,7 +5,7 @@ extends Area2D
 @export var blastoff_magnitude = 50
 
 
-func _on_body_entered(body: Player):
+func _on_body_entered(body: Node2D):
 	body.process_death_state()
 	
 	Engine.time_scale = 0.5

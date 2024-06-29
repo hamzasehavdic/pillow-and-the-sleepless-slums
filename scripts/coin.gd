@@ -5,6 +5,7 @@ extends Area2D
 @onready var sound_player: AudioStreamPlayer2D = $CoinAudio
 @export var coin_sound: AudioStream
 
+
 func _ready():
 	sound_player.stream = coin_sound
 
@@ -14,10 +15,6 @@ func _physics_process(_delta):
 
 
 func check_for_collision():
-	## An implementation of collision checks.
-	##
-	## To better understand how objects are detected in area space
-
 	#var start_time = Time.get_ticks_usec()
 
 	var space_state = get_world_2d().direct_space_state
@@ -42,10 +39,11 @@ func check_for_collision():
 		#collected.emit(collector) # no point emitting unless need for sep concerns
 		
 		#if collider.is_in_group("Player"): # group membership lookup, slow but flex
-		#if (self.collision_mask == collider.collision_layer): # mask and layer approach
-		if collider is Player: # direct type check approach
-			sound_player.play()
-			self.hide()
+		if (self.collision_mask == collider.collision_layer): # mask and layer approach
+		#if collider is Player: # direct type check approach
+			if not sound_player.playing:
+				sound_player.play()
+				self.hide()
 
 	#var end_time = Time.get_ticks_usec()
 	#print(end_time - start_time / 1000.0)

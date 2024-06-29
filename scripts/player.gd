@@ -1,7 +1,6 @@
 class_name Player
 extends CharacterBody2D
 
-
 enum State { IDLE, MOVING, JUMPING, FALLING, BOOSTED, DASHING, DEATH }
 
 # (Independent) Member variables
@@ -10,6 +9,8 @@ var boost_velocity: Vector2
 var boost_timer: float
 var last_dir: float
 var can_air_dash: bool
+@export var jump_accel_multiplier: float
+@export var fall_deaccel_multiplier: float
 
 # Constants
 const GRAVITY: float = 900.0
@@ -36,6 +37,8 @@ func _init():
 	boost_timer = 0.0
 	last_dir = 1.0
 	can_air_dash = false
+	jump_accel_multiplier = 1.3
+	fall_deaccel_multiplier = 0.8
 
 
 func _ready():
@@ -81,12 +84,15 @@ func process_moving_state(delta: float) -> void:
 
 func process_jumping_state(delta: float) -> void:
 	apply_gravity(delta)
-	apply_air_movement(1.3) # accel vel in jump
+	apply_air_movement(self.jump_accel_multiplier)
 	sprite.play("Jump")
+
+	if velocity.y <= 0:
+		sprite.play("FallReady")
 
 func process_falling_state(delta: float) -> void:
 	apply_gravity(delta)
-	apply_air_movement(0.8) # de-accel vel in fall
+	apply_air_movement(self.fall_deaccel_multiplier)
 	sprite.play("Fall")
 
 func process_boosted_state(delta: float) -> void:
@@ -95,13 +101,13 @@ func process_boosted_state(delta: float) -> void:
 		boost_velocity = Vector2.ZERO
 	else:
 		velocity = boost_velocity
-	sprite.play("Boost")
+	sprite.play("Jump")
 
 func process_dashing_state(_delta: float) -> void:
 	apply_dash()
 	sprite.self_modulate = Color.GREEN
 	sprite.flip_h = last_dir < 0
-	sprite.play("Boost")
+	sprite.play("Dash")
 
 func process_death_state() -> void:
 	play_sound(hurt_sound)
@@ -133,10 +139,10 @@ func transition_state() -> void:
 				current_state = State.JUMPING
 				velocity.y = JUMP_FORCE
 				play_sound(jump_sound)
+				sprite.play("JumpReady")
 
 			elif Input.get_axis("move_left", "move_right") != 0:
 				current_state = State.MOVING
-
 			else:
 				current_state = State.IDLE
 
@@ -192,6 +198,7 @@ func start_dash() -> void:
 
 
 func land():
+	sprite.play("FallLand")
 	velocity.x = 0
 	if Input.get_axis("move_left", "move_right") != 0: 
 		current_state = State.MOVING 

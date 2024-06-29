@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://dkoeke5h0oa6r"]
 
-[ext_resource type="Script" path="res://scripts/Dialogue.gd" id="1_2xyxx"]
+[ext_resource type="Script" path="res://scripts/dialog.gd" id="1_sio06"]
 
 [node name="Dialogue" type="Node2D"]
-script = ExtResource("1_2xyxx")
+script = ExtResource("1_sio06")
 dialog_lines = Array[Object]([])
 
 [node name="DialogStreamPlayer" type="AudioStreamPlayer2D" parent="."]

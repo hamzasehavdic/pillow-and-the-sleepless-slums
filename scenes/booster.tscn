@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d2yl0iixi1gkw"]
 
-[ext_resource type="Script" path="res://scenes/Area2D.gd" id="1_1qil7"]
+[ext_resource type="Script" path="res://scripts/booster.gd" id="1_kfwtq"]
 [ext_resource type="PackedScene" uid="uid://7cegckrxmuv0" path="res://scenes/velocity_arrow.tscn" id="2_q6sw3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tvh7a"]
@@ -10,11 +10,11 @@ size = Vector2(11.116, 3.22557)
 position = Vector2(2.08165e-12, 2.08165e-12)
 scale = Vector2(1.01401, 1)
 collision_mask = 2
-script = ExtResource("1_1qil7")
+script = ExtResource("1_kfwtq")
 
 [node name="VelocityArrow" parent="." instance=ExtResource("2_q6sw3")]
 scale = Vector2(0.998752, 1)
-scale_factor = 0.1
+script = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-2.05289e-12, -2.5)

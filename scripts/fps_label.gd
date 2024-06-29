@@ -4,7 +4,6 @@ const FONT_SIZE = 50
 
 var fps_label_settings: LabelSettings
 
-
 func _ready():
 	fps_label_settings = LabelSettings.new()	# Instantiate label settings for fps label
 	fps_label_settings.set_font_size(FONT_SIZE)	# Make it big

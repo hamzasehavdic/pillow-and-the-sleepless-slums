@@ -4,7 +4,7 @@ extends Area2D
 
 signal turnoff_effect()
 
-func _on_player_entered(_body: Player):
+func _on_player_entered(_body: CharacterBody2D):
 	if lamp_light.enabled == true:
 		lamp_light.enabled = false
 		turnoff_effect.emit()
