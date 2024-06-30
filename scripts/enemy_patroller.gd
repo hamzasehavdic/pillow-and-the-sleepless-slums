@@ -7,7 +7,6 @@ var speed: float
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var ray_cast: RayCast2D = $RayCast2D
 
-
 func _on_wakeup_animation_finished():
 	speed = 30.0
 	anim_sprite.play("idle")

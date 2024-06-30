@@ -98,9 +98,9 @@ animation = &"idle"
 metadata/_edit_lock_ = true
 
 [node name="KillArea" parent="." instance=ExtResource("3_ia7e2")]
+collision_layer = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillArea"]
-visible = false
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_k1ein")
 debug_color = Color(1, 0.0117647, 0.027451, 0.419608)

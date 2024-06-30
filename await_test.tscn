@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=3 uid="uid://b2nxkvpqn8amp"]
+
+[ext_resource type="Script" path="res://await_test.gd" id="1_2htlt"]
+[ext_resource type="Texture2D" uid="uid://smc1ad3hfmu6" path="res://assets/sprites/pillow_jump_001.png" id="2_url0k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aipig"]
+atlas = ExtResource("2_url0k")
+region = Rect2(0, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vtjlw"]
+atlas = ExtResource("2_url0k")
+region = Rect2(500, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2oeb4"]
+atlas = ExtResource("2_url0k")
+region = Rect2(1000, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cbu8d"]
+atlas = ExtResource("2_url0k")
+region = Rect2(1500, 0, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a5kud"]
+atlas = ExtResource("2_url0k")
+region = Rect2(0, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkd5w"]
+atlas = ExtResource("2_url0k")
+region = Rect2(500, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4ush"]
+atlas = ExtResource("2_url0k")
+region = Rect2(1000, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrhvh"]
+atlas = ExtResource("2_url0k")
+region = Rect2(1500, 500, 500, 500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5nq2y"]
+atlas = ExtResource("2_url0k")
+region = Rect2(0, 1000, 500, 500)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4xepe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aipig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vtjlw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2oeb4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cbu8d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a5kud")
+}],
+"loop": true,
+"name": &"animation1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkd5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4ush")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrhvh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5nq2y")
+}],
+"loop": true,
+"name": &"animation2",
+"speed": 5.0
+}]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_2htlt")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(649, 362)
+sprite_frames = SubResource("SpriteFrames_4xepe")
+animation = &"animation2"
