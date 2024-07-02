@@ -19,7 +19,8 @@ var is_dash_jump: bool
 const GRAVITY: float = 900.0
 const MOVE_SPEED: float = 100.0
 const JUMP_FORCE: float = -300.0
-const DASH_SPEED: float = 400.0
+const DASH_SPEED: float = 90.0
+const DASH_DURATION: float = 0.3
 
 # Exported variables
 @export var jump_sound: AudioStream = preload("res://assets/sounds/jump_1.wav")
@@ -30,6 +31,7 @@ const DASH_SPEED: float = 400.0
 
 # Dependent Node refs (to Nodes composed in/relate to Player)
 var dash_timer: Timer
+var dash_magnitude: float
 var sprite: AnimatedSprite2D
 var sound_player: AudioStreamPlayer2D
 var melee_hitbox: CollisionShape2D 
@@ -50,7 +52,14 @@ func _init():
 
 func _ready():
 	# Init node refs & vars dependent on the scene tree
-	dash_timer = $DashTimer
+	dash_timer = Timer.new()
+	add_child(dash_timer)
+	dash_timer.one_shot = true
+	dash_timer.autostart = false
+	dash_timer.wait_time = DASH_DURATION
+	dash_timer.timeout.connect(self._on_dash_timer_timeout)
+	dash_magnitude = 1/DASH_DURATION
+
 	sprite = $AnimatedSprite2D
 	sound_player = $AudioStreamPlayer2D
 	melee_hitbox = $MeleeHitboxArea2D/MeleeHitBoxCollisionShape2D
@@ -166,6 +175,8 @@ func process_dashing_state(_delta: float) -> void:
 
 func process_death_state() -> void:
 	current_state = State.DEATH
+	if is_on_floor():
+		sprite.play("JumpSquat")
 	play_sound(hurt_sound)
 
 
@@ -173,6 +184,11 @@ func transition_state() -> void:
 	# Note: player dash always turns to fall after timeout signal
 	# Therefore, no need to transition
 	match current_state:
+
+		State.FALLBRACE, State.JUMPSQUAT, State.LANDING:
+			if Input.is_action_just_pressed("dash") and can_air_dash:
+				start_dash()
+
 		State.BOOSTED:
 			if boost_velocity == Vector2.ZERO:
 				velocity = Vector2.ZERO
@@ -220,6 +236,9 @@ func transition_state() -> void:
 			if Input.is_action_just_pressed("jump"):
 				is_dash_jump = true
 				start_jump(1.5)
+			elif Input.is_action_just_pressed("Melee"):
+				current_state = State.MELEE
+
 
 
 func apply_gravity(delta: float) -> void:
@@ -250,8 +269,7 @@ func apply_boost(boost_vel: Vector2, boost_duration: float) -> void:
 
 
 func apply_dash() -> void:
-	velocity = Vector2(last_dir * DASH_SPEED, 0) # slight offset upwards
-	#velocity.x = last_dir * DASH_SPEED
+	velocity = Vector2(last_dir * DASH_SPEED * dash_magnitude, 0) # slight offset upwards
 
 
 func start_jump(magnitude: float = 1.0) -> void:
@@ -262,12 +280,13 @@ func start_jump(magnitude: float = 1.0) -> void:
 
 func start_dash() -> void:
 	current_state = State.DASHING # Prevent transitions
-	dash_timer.start()
 	play_sound(dash_sound)
 	can_air_dash = false
+	dash_timer.start()
+	print(dash_timer.time_left)
 
 
-func land():
+func land() -> void:
 	velocity.x = 0
 	can_air_dash = true # Reset air dash
 	if Input.get_axis("move_left", "move_right") != 0: 
@@ -276,7 +295,7 @@ func land():
 		current_state = State.IDLE 
 
 
-func _on_dash_timer_timeout():
+func _on_dash_timer_timeout() -> void:
 	if is_on_floor():
 		land()
 	else:
@@ -291,15 +310,21 @@ func play_sound(sound_stream: AudioStream) -> void:
 
 func _on_melee_hitbox_area_2d_area_entered(area: Node2D) -> void:
 	var enemy = area.get_parent()
-	if enemy.is_in_group("Enemies"):
-		enemy.set_process(false)
-		var hit_stun_duration = 0.5
-		var tween: Tween = create_tween()
-		tween.set_parallel(true)
-		tween.tween_property(enemy, "skew", rad_to_deg(PI/4), hit_stun_duration)
-		tween.tween_property(enemy, "position",\
-				enemy.position + Vector2(last_dir * randi_range(50, 100), randi_range(-50, -75)), hit_stun_duration) 
-		tween.tween_property(enemy, "modulate", Color.BLACK, hit_stun_duration)
-		await tween.finished
-		if enemy != null:
-			enemy.queue_free()
+	enemy.set_process(false)
+	var hit_stun_duration = 0.5
+	var tween: Tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(enemy, "skew", rad_to_deg(PI/4), hit_stun_duration)
+	tween.tween_property(enemy, "position",\
+			enemy.position + Vector2(last_dir * randi_range(50, 100), randi_range(-50, -75)), hit_stun_duration) 
+	tween.tween_property(enemy, "modulate", Color.BLACK, hit_stun_duration)
+	await tween.finished
+	if enemy != null:
+		enemy.queue_free()
+
+
+func _on_audio_stream_player_2d_finished() -> void:
+	print(sound_player.stream.to_string())
+	if sound_player.stream == hurt_sound:
+		GameManager.die()
+

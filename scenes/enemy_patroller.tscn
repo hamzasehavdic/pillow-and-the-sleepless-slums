@@ -91,7 +91,7 @@ script = ExtResource("1_612ku")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 modulate = Color(0.443137, 0.443137, 0.443137, 1)
-self_modulate = Color(1, 1, 1, 0.8)
+self_modulate = Color(1, 1, 1, 0.447059)
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_jspr2")
 animation = &"idle"
@@ -113,6 +113,8 @@ target_position = Vector2(13, 0)
 position = Vector2(-1.42109e-14, -7)
 scale = Vector2(5.9375, 5.24357)
 energy = 5.0
+shadow_enabled = true
+shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_phb62")
 offset = Vector2(2.08165e-12, 2.08165e-12)
 texture_scale = 0.1

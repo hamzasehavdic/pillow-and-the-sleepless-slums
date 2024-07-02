@@ -1,36 +1,26 @@
 extends Area2D
 
 
-@onready var timer = $Timer
-@export var blastoff_magnitude = 50
+@export var blastoff_magnitude = 100
 
 
 func _on_body_entered(body: Node2D):
 	body.process_death_state()
 	
-	Engine.time_scale = 0.5
+	Engine.time_scale = 0.1
 	body.get_node("CollisionShape2D").queue_free()
 
-	body.get_child(0).modulate = Color.RED
+	body.modulate = Color.RED
+	body.velocity = Vector2.ZERO
 	
-	if get_parent().is_in_group("Enemies"):
-	# fix this to be away from enemy not towards enemy facing dir
-		var enemy_dir = get_parent().dir
-		body.rotate(enemy_dir * PI/8)
-	
-	var tween: Tween = create_tween()
-	var local_up = Vector2.UP.rotated(body.rotation)
-	print(local_up)
-	tween.tween_property(
-		body, "position",
-		body.position + local_up * blastoff_magnitude, 0.5)
-
-	timer.start()
+	if not body.is_on_floor():	
+		var tween = create_tween()
+		tween.tween_property(
+			body, "position:y",
+			body.position.y - blastoff_magnitude, GameManager.DEATH_DURATION)
 
 
-func _on_timer_timeout():
-	# Get the tree of nodes this kill area is in
-	# Then reloads the entire scene (Main)
-	Engine.time_scale = 1.0
-	GameManager.reset_coin_count()
-	get_tree().reload_current_scene()
+
+
+
+

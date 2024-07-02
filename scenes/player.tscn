@@ -316,7 +316,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Dash",
-"speed": 16.0
+"speed": 30.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -338,7 +338,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"FallBrace",
-"speed": 16.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -404,7 +404,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"JumpSquat",
-"speed": 24.0
+"speed": 40.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -418,7 +418,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Landing",
-"speed": 24.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -553,10 +553,10 @@ script = ExtResource("1_vsuc2")
 [node name="MeleeHitboxArea2D" type="Area2D" parent="."]
 position = Vector2(15, -15.5)
 collision_layer = 2
-collision_mask = 29
+collision_mask = 16
 
 [node name="MeleeHitBoxCollisionShape2D" type="CollisionShape2D" parent="MeleeHitboxArea2D"]
-position = Vector2(2.08165e-12, 2.08165e-12)
+position = Vector2(2, 0)
 shape = SubResource("RectangleShape2D_a4kwx")
 disabled = true
 debug_color = Color(1, 0, 0.14902, 0.419608)
@@ -567,8 +567,6 @@ scale = Vector2(0.07, 0.07)
 sprite_frames = SubResource("SpriteFrames_s7omb")
 animation = &"Dash"
 autoplay = "Fall"
-frame = 7
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -16)
@@ -579,10 +577,6 @@ debug_color = Color(0.843137, 0.380392, 0, 0.419608)
 scale_factor = 0.1
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-
-[node name="DashTimer" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true
 
 [node name="StateLabel" type="Label" parent="."]
 anchors_preset = 7
@@ -602,4 +596,4 @@ horizontal_alignment = 1
 
 [connection signal="area_entered" from="MeleeHitboxArea2D" to="." method="_on_melee_hitbox_area_2d_area_entered"]
 [connection signal="body_entered" from="MeleeHitboxArea2D" to="." method="_on_melee_hitbox_area_2d_body_entered"]
-[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_audio_stream_player_2d_finished"]

@@ -1,44 +1,36 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckq5c05nt71n6"]
+[gd_scene load_steps=5 format=3 uid="uid://ckq5c05nt71n6"]
 
-[ext_resource type="Texture2D" uid="uid://bvcv3tpy6knq5" path="res://assets/sprites/lamp3.png" id="1_5ji33"]
 [ext_resource type="Script" path="res://scripts/lamp.gd" id="1_ujt7p"]
+[ext_resource type="Texture2D" uid="uid://b3wnje4fw5u1h" path="res://assets/sprites/lamppost.webp" id="2_pbp33"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v0m35"]
-size = Vector2(16, 52)
+size = Vector2(16, 32)
 
-[sub_resource type="Gradient" id="Gradient_2kegb"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_o36jt"]
-gradient = SubResource("Gradient_2kegb")
-fill = 1
-fill_from = Vector2(0.501424, 0.475783)
-fill_to = Vector2(0.817664, 0.843305)
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_lx30w"]
+polygon = PackedVector2Array(12.3092, -30.1662, 7.8331, -34.9545, -3.35704, -34.9545, -11.0643, -31.696, -19.0232, -36.3909, 19.0232, -36.3909)
 
 [node name="Lamp" type="Area2D"]
 collision_mask = 2
 script = ExtResource("1_ujt7p")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(4, -30)
-texture = ExtResource("1_5ji33")
+position = Vector2(1, -35)
+scale = Vector2(0.163, 0.163)
+texture = ExtResource("2_pbp33")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(5, -27)
+position = Vector2(-1, -17)
 shape = SubResource("RectangleShape2D_v0m35")
 debug_color = Color(0.247059, 0.635294, 0, 0.419608)
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(14, -47)
-scale = Vector2(17.4107, 19.1964)
-energy = 3.0
-range_z_min = -4096
-range_z_max = 4086
-shadow_enabled = true
-texture = SubResource("GradientTexture2D_o36jt")
-offset = Vector2(2.08165e-12, 2.08165e-12)
-texture_scale = 0.07
-height = 30.0
+[node name="LightRayCast2D" type="RayCast2D" parent="."]
+position = Vector2(2.08165e-12, -71)
+target_position = Vector2(2.08165e-12, 600)
+collision_mask = 3
+collide_with_areas = true
 
-[connection signal="body_entered" from="." to="." method="_on_player_entered"]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="LightRayCast2D"]
+position = Vector2(1, 71)
+rotation = 3.14159
+scale = Vector2(0.893644, -2.08843)
+occluder = SubResource("OccluderPolygon2D_lx30w")

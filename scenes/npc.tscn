@@ -1,13 +1,58 @@
-[gd_scene load_steps=6 format=3 uid="uid://d03a58dln3x2v"]
+[gd_scene load_steps=23 format=3 uid="uid://d03a58dln3x2v"]
 
 [ext_resource type="Script" path="res://scripts/npc.gd" id="1_yakkh"]
-[ext_resource type="Texture2D" uid="uid://di8v6oiyco7h6" path="res://assets/sprites/guardian_0.png" id="2_ooy26"]
+[ext_resource type="Texture2D" uid="uid://dn00j8nt656sv" path="res://assets/sprites/enemy_1.png" id="2_i3gy0"]
 [ext_resource type="FontFile" uid="uid://btmdfel31hrn" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_o0lc8"]
+[ext_resource type="FontFile" uid="uid://0wrngqs3c3jl" path="res://assets/fonts/PixelOperator8.ttf" id="4_tcx5g"]
+[ext_resource type="PackedScene" uid="uid://dkoeke5h0oa6r" path="res://scenes/dialogue.tscn" id="5_ie6l1"]
+[ext_resource type="AudioStream" uid="uid://ptc6r771hhje" path="res://assets/sounds/dialog/guide/guide_01.wav" id="6_uds6s"]
+[ext_resource type="Script" path="res://scripts/dialog_entry.gd" id="7_mjrmu"]
+[ext_resource type="AudioStream" uid="uid://plvk0oeekmd0" path="res://assets/sounds/dialog/guide/guide_02.wav" id="8_gldrf"]
+[ext_resource type="AudioStream" uid="uid://dbk4eavmilwmr" path="res://assets/sounds/dialog/guide/guide_03.wav" id="9_wssoj"]
+[ext_resource type="AudioStream" uid="uid://dg6uptdem31u1" path="res://assets/sounds/dialog/guide/guide_04.wav" id="10_ql1fl"]
+[ext_resource type="AudioStream" uid="uid://cntjce5y4rri5" path="res://assets/sounds/dialog/guide/guide_05.wav" id="11_l7ofl"]
+[ext_resource type="AudioStream" uid="uid://bmtxijxycn5aw" path="res://assets/sounds/dialog/guide/guide_06.wav" id="12_yejd4"]
+[ext_resource type="AudioStream" uid="uid://qsjsboy7y0gv" path="res://assets/sounds/dialog/guide/guide_07.wav" id="13_ldkn2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5mpj0"]
-size = Vector2(109, 39)
+size = Vector2(109, 51)
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_c1ept"]
+
+[sub_resource type="Resource" id="Resource_h7qds"]
+script = ExtResource("7_mjrmu")
+dialog_text = "How long has it been?"
+dialog_WAV_file = ExtResource("6_uds6s")
+
+[sub_resource type="Resource" id="Resource_uexon"]
+script = ExtResource("7_mjrmu")
+dialog_text = "...I guess I should be thankful."
+dialog_WAV_file = ExtResource("8_gldrf")
+
+[sub_resource type="Resource" id="Resource_thdax"]
+script = ExtResource("7_mjrmu")
+dialog_text = "You fell into Slum Town, good sir!"
+dialog_WAV_file = ExtResource("9_wssoj")
+
+[sub_resource type="Resource" id="Resource_371t6"]
+script = ExtResource("7_mjrmu")
+dialog_text = "There's others... Like me. Lamps... sealed us away."
+dialog_WAV_file = ExtResource("10_ql1fl")
+
+[sub_resource type="Resource" id="Resource_kwj3j"]
+script = ExtResource("7_mjrmu")
+dialog_text = "Switch 'em all off, and MAYBE this predicament changes..."
+dialog_WAV_file = ExtResource("11_l7ofl")
+
+[sub_resource type="Resource" id="Resource_r2lxh"]
+script = ExtResource("7_mjrmu")
+dialog_text = "Can't get worse then the spectres - well it can."
+dialog_WAV_file = ExtResource("12_yejd4")
+
+[sub_resource type="Resource" id="Resource_yc3up"]
+script = ExtResource("7_mjrmu")
+dialog_text = "But lets not stress about details!"
+dialog_WAV_file = ExtResource("13_ldkn2")
 
 [node name="NPC" type="Node2D"]
 z_index = 2
@@ -18,18 +63,18 @@ collision_layer = 8
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, -17.5)
+position = Vector2(0, -23.5)
 shape = SubResource("RectangleShape2D_5mpj0")
 debug_color = Color(0.243137, 0.635294, 0, 0.419608)
 
-[node name="NPCSprite" type="Sprite2D" parent="."]
+[node name="NpcSprite" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.8)
-position = Vector2(0, -8)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_ooy26")
+position = Vector2(-3, -22)
+scale = Vector2(0.105, 0.105)
+texture = ExtResource("2_i3gy0")
 
 [node name="InteractionDisplayBox" type="TextureRect" parent="."]
-self_modulate = Color(1, 1, 1, 0.5)
+self_modulate = Color(1, 1, 1, 0.839216)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -58,3 +103,20 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.1)
 theme_override_fonts/font = ExtResource("3_o0lc8")
 theme_override_font_sizes/font_size = 8
 text = "Press 't' to interact"
+
+[node name="NpcDialogLabel" type="Label" parent="."]
+offset_left = -81.0
+offset_top = -148.0
+offset_right = 81.0
+offset_bottom = -57.0
+theme_override_colors/font_color = Color(100, 100, 100, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("4_tcx5g")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 3
+
+[node name="NpcDialog" parent="." instance=ExtResource("5_ie6l1")]
+dialog_lines = Array[Object]([SubResource("Resource_h7qds"), SubResource("Resource_uexon"), SubResource("Resource_thdax"), SubResource("Resource_371t6"), SubResource("Resource_kwj3j"), SubResource("Resource_r2lxh"), SubResource("Resource_yc3up")])
