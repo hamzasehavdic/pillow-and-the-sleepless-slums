@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dn00j8nt656sv" path="res://assets/sprites/enemy_1.png" id="2_i3gy0"]
 [ext_resource type="FontFile" uid="uid://btmdfel31hrn" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="3_o0lc8"]
 [ext_resource type="FontFile" uid="uid://0wrngqs3c3jl" path="res://assets/fonts/PixelOperator8.ttf" id="4_tcx5g"]
-[ext_resource type="PackedScene" uid="uid://dkoeke5h0oa6r" path="res://scenes/dialogue.tscn" id="5_ie6l1"]
+[ext_resource type="PackedScene" path="res://scenes/dialogue.tscn" id="5_ie6l1"]
 [ext_resource type="AudioStream" uid="uid://ptc6r771hhje" path="res://assets/sounds/dialog/guide/guide_01.wav" id="6_uds6s"]
 [ext_resource type="Script" path="res://scripts/dialog_entry.gd" id="7_mjrmu"]
 [ext_resource type="AudioStream" uid="uid://plvk0oeekmd0" path="res://assets/sounds/dialog/guide/guide_02.wav" id="8_gldrf"]

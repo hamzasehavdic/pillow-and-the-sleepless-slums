@@ -283,7 +283,6 @@ func start_dash() -> void:
 	play_sound(dash_sound)
 	can_air_dash = false
 	dash_timer.start()
-	print(dash_timer.time_left)
 
 
 func land() -> void:
@@ -324,7 +323,6 @@ func _on_melee_hitbox_area_2d_area_entered(area: Node2D) -> void:
 
 
 func _on_audio_stream_player_2d_finished() -> void:
-	print(sound_player.stream.to_string())
 	if sound_player.stream == hurt_sound:
 		GameManager.die()
 

@@ -1,4 +1,4 @@
-class_name Coin
+xclass_name Coin
 extends Area2D
 
 
