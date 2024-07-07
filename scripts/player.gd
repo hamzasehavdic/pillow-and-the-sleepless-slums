@@ -1,26 +1,28 @@
 class_name Player
 extends CharacterBody2D
 
-enum State { IDLE, MOVING, JUMPING, JUMPSQUAT, FALLBRACE, FALLING, LANDING, MELEE, BOOSTED, DASHING, DEATH }
+enum State { IDLE, MOVING, JUMPING, JUMPSQUAT, FALLING, MELEE, BOOSTED, DASHING, DEATH }
 
-@onready var state_names: Dictionary = {0:"idle", 1:"moving", 2:"jumping", 3:"jumpsquat", 4:"fallbrace", 5:"falling", 6:"landing", 7:"melee", 8:"boosted", 9:"dashing", 10:"death"}
+@onready var state_names: Dictionary = {0:"idle", 1:"moving", 2:"jumping", 3:"jumpsquat", 4:"falling", 5:"melee", 6:"boosted", 7:"dashing", 8:"death"}
 
 # (Independent) Member variables
 var current_state: State
 var boost_velocity: Vector2
 var boost_timer: float
 var last_dir: float
+var can_coyote_jump: bool
 var can_air_dash: bool
 var is_dash_jump: bool
-@export var jump_accel_multiplier: float
-@export var fall_deaccel_multiplier: float
 
 # Constants
 const GRAVITY: float = 900.0
-const MOVE_SPEED: float = 100.0
-const JUMP_FORCE: float = -300.0
-const DASH_SPEED: float = 90.0
+const MOVE_SPEED: float = 120.0
+const JUMP_FORCE: float = -250.0
+const AIR_CONTROL: float = 1.3
+const COYOTE_JUMP_WINDOW_DURATION: float = 3.0
+const DASH_SPEED: float = 75.0
 const DASH_DURATION: float = 0.3
+const DASH_ACCEL: float = 1.3
 
 # Exported variables
 @export var jump_sound: AudioStream = preload("res://assets/sounds/jump_1.wav")
@@ -30,12 +32,16 @@ const DASH_DURATION: float = 0.3
 
 
 # Dependent Node refs (to Nodes composed in/relate to Player)
+var coyote_jump_timer: Timer
+var jump_charge_timer: Timer
 var dash_timer: Timer
 var dash_magnitude: float
 var sprite: AnimatedSprite2D
 var sound_player: AudioStreamPlayer2D
 var melee_hitbox: CollisionShape2D 
 var state_label: Label
+var hurtbox: CollisionShape2D
+var landing_ray: RayCast2D
 
 
 func _init():
@@ -44,9 +50,8 @@ func _init():
 	boost_velocity = Vector2.ZERO
 	boost_timer = 0.0
 	last_dir = 1.0
+	can_coyote_jump = true
 	can_air_dash = false
-	jump_accel_multiplier = 1.3
-	fall_deaccel_multiplier = 0.8
 	is_dash_jump = false
 
 
@@ -60,10 +65,26 @@ func _ready():
 	dash_timer.timeout.connect(self._on_dash_timer_timeout)
 	dash_magnitude = 1/DASH_DURATION
 
+	coyote_jump_timer = Timer.new()
+	add_child(coyote_jump_timer)
+	coyote_jump_timer.one_shot = true
+	coyote_jump_timer.autostart = false
+	coyote_jump_timer.wait_time = COYOTE_JUMP_WINDOW_DURATION
+	coyote_jump_timer.timeout.connect(self._on_coyote_jump_timer_timeout)
+
+	jump_charge_timer = Timer.new()
+	add_child(jump_charge_timer)
+	jump_charge_timer.one_shot = true
+	jump_charge_timer.autostart = false
+	jump_charge_timer.wait_time = 0.5
+	
+
 	sprite = $AnimatedSprite2D
 	sound_player = $AudioStreamPlayer2D
 	melee_hitbox = $MeleeHitboxArea2D/MeleeHitBoxCollisionShape2D
 	state_label = $StateLabel
+	hurtbox = $HurtboxCollisionShape2D
+	landing_ray = $LandingRayCast2D
 
 
 func _physics_process(delta: float) -> void:
@@ -78,12 +99,8 @@ func _physics_process(delta: float) -> void:
 			process_jumping_state(delta)
 		State.JUMPSQUAT:
 			process_jumpsquat_state(delta)
-		State.FALLBRACE:
-			process_fallbrace_state(delta)
 		State.FALLING:
 			process_falling_state(delta)
-		State.LANDING:
-			process_landing_state(delta)
 		State.MELEE:
 			process_melee_state(delta)
 		State.BOOSTED:
@@ -93,6 +110,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	transition_state()
 	state_label.text = "State: " + state_names[current_state]
+	print(jump_charge_timer.time_left)
 
 
 func process_idle_state(_delta: float) -> void:
@@ -108,48 +126,25 @@ func process_moving_state(_delta: float) -> void:
 
 func process_jumping_state(delta: float) -> void:
 	apply_gravity(delta)
-	apply_air_movement(2.0 if is_dash_jump else jump_accel_multiplier)
+	apply_air_movement(AIR_CONTROL)
 	sprite.play("Jump")
 
 
-func process_jumpsquat_state(delta: float) -> void:
-	apply_gravity(delta)
-	apply_movement(0.1)
-	if not sprite.is_playing() or sprite.animation != "JumpSquat":
-		sprite.play("JumpSquat")
-	if sprite.frame == sprite.sprite_frames.get_frame_count("JumpSquat") - 1:
-		start_jump()
-
-
-func process_fallbrace_state(delta: float) -> void:
-	apply_gravity(delta)
-	if not sprite.is_playing() or sprite.animation != "FallBrace":
-		sprite.play("FallBrace")
-	if sprite.frame == sprite.sprite_frames.get_frame_count("FallBrace") - 1:
-		current_state = State.FALLING
-
+func process_jumpsquat_state(_delta: float) -> void:
+	velocity = Vector2.ZERO
 
 func process_falling_state(delta: float) -> void:
 	apply_gravity(delta)
-	apply_air_movement(2.0 if is_dash_jump else fall_deaccel_multiplier)
-	sprite.play("Fall")
-
-
-func process_landing_state(_delta: float) -> void:
-	apply_movement(0.1)
-	if not sprite.is_playing() or sprite.animation != "Landing":
-		sprite.play("Landing")
-	if sprite.frame == sprite.sprite_frames.get_frame_count("Landing") - 1:
-		land()
+	apply_air_movement(AIR_CONTROL)
 
 
 func process_melee_state(_delta: float) -> void:
-	apply_movement(0.01)
+	apply_movement(0.01) # TODO required to keep player grounded; fix this
 	if not sprite.is_playing() or sprite.animation != "Melee":
 		melee_hitbox.get_parent().position.x = 15 * (-1 if sprite.flip_h else 1)
 		sprite.play("Melee")
 	
-	if sprite.frame > 8 and melee_hitbox.disabled:
+	if sprite.frame > 5 and melee_hitbox.disabled:
 		play_sound(melee_sound)
 		melee_hitbox.disabled = false
 	elif sprite.frame == sprite.sprite_frames.get_frame_count("Melee") - 1:
@@ -167,16 +162,16 @@ func process_boosted_state(delta: float) -> void:
 
 
 func process_dashing_state(_delta: float) -> void:
+	apply_gravity(_delta)
 	apply_dash()
 	sprite.self_modulate = Color.GREEN
 	sprite.flip_h = last_dir < 0
-	sprite.play("Dash")
 
 
 func process_death_state() -> void:
 	current_state = State.DEATH
 	if is_on_floor():
-		sprite.play("JumpSquat")
+		sprite.play("Death")
 	play_sound(hurt_sound)
 
 
@@ -185,8 +180,12 @@ func transition_state() -> void:
 	# Therefore, no need to transition
 	match current_state:
 
-		State.FALLBRACE, State.JUMPSQUAT, State.LANDING:
-			if Input.is_action_just_pressed("dash") and can_air_dash:
+		State.JUMPSQUAT:
+			if Input.is_action_just_released("jump"):
+				start_jump(get_jump_charge_scalar())
+				jump_charge_timer.stop()
+
+			elif Input.is_action_just_pressed("dash") and can_air_dash:
 				start_dash()
 
 		State.BOOSTED:
@@ -206,38 +205,54 @@ func transition_state() -> void:
 				start_dash()
 
 			elif not is_on_floor():
-				current_state = State.FALLING
+				start_fall()
+				coyote_jump_timer.start()
+				print("CAN COYOTE")
 
 			elif Input.is_action_just_pressed("Melee"):
 				current_state = State.MELEE
+	
 
-			elif Input.is_action_just_pressed("jump"):
-				current_state = State.JUMPSQUAT
+			elif Input.is_action_pressed("jump"):
+				start_jumpsquat()
+
 			# Loop current state
 			elif Input.get_axis("move_left", "move_right") != 0:
 				current_state = State.MOVING
 			else:
 				current_state = State.IDLE
 
-		State.JUMPING, State.FALLING:
+		State.JUMPING:
 			if boost_velocity != Vector2.ZERO:
 				current_state = State.BOOSTED
+			
+			elif velocity.y > 0:
+				start_fall()
 
 			elif Input.is_action_just_pressed("dash") and can_air_dash:
 				start_dash()
+		
+		State.FALLING:
+			if boost_velocity != Vector2.ZERO:
+				current_state = State.BOOSTED
 
-			elif velocity.y == 0:
-				if current_state == State.JUMPING:
-					current_state = State.FALLBRACE
-				elif current_state == State.FALLING and is_on_floor():
-					current_state = State.LANDING
-					is_dash_jump = false
+			elif Input.is_action_just_pressed("jump") and coyote_jump_timer.time_left > 0:
+				start_jump(0.8)
+
+			elif Input.is_action_just_pressed("dash") and can_air_dash:
+				start_dash()
+			
+			elif is_on_floor():
+				land()
+
+			elif landing_ray.is_colliding():
+				if not sprite.is_playing() or sprite.animation != "Landing":
+					sprite.play("Landing")
+
 		State.DASHING:
 			if Input.is_action_just_pressed("jump"):
 				is_dash_jump = true
-				start_jump(1.5)
-			elif Input.is_action_just_pressed("Melee"):
-				current_state = State.MELEE
+				start_jump(DASH_ACCEL)
 
 
 
@@ -268,31 +283,49 @@ func apply_boost(boost_vel: Vector2, boost_duration: float) -> void:
 	current_state = State.BOOSTED
 
 
-func apply_dash() -> void:
-	velocity = Vector2(last_dir * DASH_SPEED * dash_magnitude, 0) # slight offset upwards
+func start_jumpsquat() -> void:
+	jump_charge_timer.start()
+	sprite.play("JumpSquat")
+	current_state = State.JUMPSQUAT	
+
+
+func get_jump_charge_scalar() -> float:
+	if jump_charge_timer.time_left == 0:
+		sprite.self_modulate = Color.ORANGE
+		return 1.5 # taller than 4 units
+	elif jump_charge_timer.time_left < 0.4:
+		sprite.self_modulate = Color.YELLOW
+		return 1.25 # taller than 3 units
+	return 1
 
 
 func start_jump(magnitude: float = 1.0) -> void:
-	current_state = State.JUMPING
 	velocity.y = JUMP_FORCE * magnitude
+
+	sprite.play("Jump")
+	current_state = State.JUMPING
 	play_sound(jump_sound)
 
 
+func _on_coyote_jump_timer_timeout() -> void:
+	can_coyote_jump = false
+
+
+func start_fall() -> void:
+	sprite.play("Fall")
+	current_state = State.FALLING
+
+
 func start_dash() -> void:
-	current_state = State.DASHING # Prevent transitions
-	play_sound(dash_sound)
 	can_air_dash = false
+	sprite.play("Dash")
+	current_state = State.DASHING # Prevent transitions
 	dash_timer.start()
-	print(dash_timer.time_left)
+	play_sound(dash_sound)
 
 
-func land() -> void:
-	velocity.x = 0
-	can_air_dash = true # Reset air dash
-	if Input.get_axis("move_left", "move_right") != 0: 
-		current_state = State.MOVING 
-	else:
-		current_state = State.IDLE 
+func apply_dash() -> void:
+	velocity = Vector2(last_dir * DASH_SPEED * dash_magnitude, 0) # slight offset upwards
 
 
 func _on_dash_timer_timeout() -> void:
@@ -303,6 +336,18 @@ func _on_dash_timer_timeout() -> void:
 	sprite.self_modulate = Color.WHITE
 
 
+func land() -> void:
+	sprite.self_modulate = Color.WHITE
+	velocity.x = 0
+	can_air_dash = true # Reset air dash
+	coyote_jump_timer.stop()
+	if Input.get_axis("move_left", "move_right") != 0: 
+		current_state = State.MOVING 
+	else:
+		current_state = State.IDLE
+
+
+
 func play_sound(sound_stream: AudioStream) -> void:
 	sound_player.stream = sound_stream
 	sound_player.play()
@@ -310,7 +355,7 @@ func play_sound(sound_stream: AudioStream) -> void:
 
 func _on_melee_hitbox_area_2d_area_entered(area: Node2D) -> void:
 	var enemy = area.get_parent()
-	enemy.set_process(false)
+	enemy.set_process(false) # Disable enemy
 	var hit_stun_duration = 0.5
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)

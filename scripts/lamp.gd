@@ -54,7 +54,7 @@ func _on_player_entered_light_kill(body: Player):
 	body.process_death_state()
 	
 	Engine.time_scale = 0.1
-	body.get_node("CollisionShape2D").queue_free()
+	body.get_node("HurtboxCollisionShape2D").queue_free()
 	body.modulate = Color.RED
 	
 

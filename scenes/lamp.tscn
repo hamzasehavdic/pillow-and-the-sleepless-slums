@@ -7,7 +7,7 @@
 size = Vector2(16, 32)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_lx30w"]
-polygon = PackedVector2Array(12.3092, -30.1662, 7.8331, -34.9545, -3.35704, -34.9545, -11.0643, -31.696, -19.0232, -36.3909, 19.0232, -36.3909)
+polygon = PackedVector2Array(2.23783, -33.518, 2.23782, -34.4757, -0.000204206, -34.4757, -0.000198603, -33.518, -1.11922, -34.9545, 3.35683, -34.9545)
 
 [node name="Lamp" type="Area2D"]
 collision_mask = 2

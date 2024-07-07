@@ -8,7 +8,8 @@ func _on_body_entered(body: Node2D):
 	body.process_death_state()
 	
 	Engine.time_scale = 0.1
-	body.get_node("CollisionShape2D").queue_free()
+
+	body.get_node("HurtboxCollisionShape2D").queue_free()
 
 	body.modulate = Color.RED
 	body.velocity = Vector2.ZERO
