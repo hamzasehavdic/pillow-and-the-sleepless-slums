@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cfnbg7exdibmq"]
-
-[ext_resource type="Script" path="res://scripts/kill_area.gd" id="1_qkvgc"]
-
-[node name="KillArea" type="Area2D"]
-collision_mask = 2
-script = ExtResource("1_qkvgc")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

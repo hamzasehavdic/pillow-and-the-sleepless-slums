@@ -1,0 +1,247 @@
+[gd_scene load_steps=13 format=3 uid="uid://cxl0s06podrqw"]
+
+[ext_resource type="PackedScene" uid="uid://bqk5tkubej45k" path="res://scenes/enemies/enemy_brute.tscn" id="1_qwdar"]
+[ext_resource type="Texture2D" uid="uid://mw4tvxf2kscc" path="res://assets/graphics/world/platform_tileset.png" id="1_wkydr"]
+[ext_resource type="Texture2D" uid="uid://dvckukx8pbffu" path="res://assets/graphics/world/pipe_tileset.png" id="2_uyeux"]
+[ext_resource type="Texture2D" uid="uid://dlja6a4i8osm1" path="res://assets/graphics/world/background_night.jpeg" id="3_eu73s"]
+[ext_resource type="PackedScene" uid="uid://ce7ey4t4i1xct" path="res://scenes/player/player.tscn" id="4_ot77c"]
+[ext_resource type="PackedScene" uid="uid://1r1vm5g8i0ot" path="res://scenes/world/spike.tscn" id="5_geybd"]
+[ext_resource type="Script" path="res://scenes/classes/KillArea.gd" id="6_bqcdr"]
+[ext_resource type="PackedScene" uid="uid://d3htse2wphw1g" path="res://scenes/world/pillow_stack.tscn" id="8_mfova"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_f48e1"]
+resource_name = "platforms"
+texture = ExtResource("1_wkydr")
+texture_region_size = Vector2i(30, 30)
+9:4/size_in_atlas = Vector2i(7, 4)
+9:4/0 = 0
+9:4/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+9:4/0/physics_layer_0/angular_velocity = 0.0
+9:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-91.5745, -32.3868, 91.928, -33.7381, 91.2168, 57.9827, -88.7528, 56.785)
+1:0/size_in_atlas = Vector2i(9, 4)
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-118.971, -33.234, -118.264, 54.0937, 121.092, 58.3363, 117.91, -36.7696)
+11:0/size_in_atlas = Vector2i(5, 4)
+11:0/0 = 0
+11:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+11:0/0/physics_layer_0/angular_velocity = 0.0
+11:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-61.6258, -37.0289, 59.6244, -37.0905, 60.6263, 54.1055, -59.5778, 54.7993)
+1:4/size_in_atlas = Vector2i(3, 4)
+1:4/0 = 0
+1:4/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+1:4/0/physics_layer_0/angular_velocity = 0.0
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-28.9729, -32.8478, 30.4182, -33.2851, 33.5823, 57.4741, -30.4191, 57.0998)
+5:4/size_in_atlas = Vector2i(3, 4)
+5:4/0 = 0
+5:4/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+5:4/0/physics_layer_0/angular_velocity = 0.0
+5:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-28.9729, -32.8478, 30.4182, -33.2851, 33.5823, 57.4741, -30.4191, 57.0998)
+1:8/size_in_atlas = Vector2i(9, 2)
+1:8/0 = 0
+1:8/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+1:8/0/physics_layer_0/angular_velocity = 0.0
+1:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-129.224, 24.7487, -113.667, 2.47487, 116.496, 3.88908, 132.052, 24.7487)
+1:10/size_in_atlas = Vector2i(7, 2)
+1:10/0 = 0
+1:10/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+1:10/0/physics_layer_0/angular_velocity = 0.0
+1:10/0/physics_layer_0/polygon_0/points = PackedVector2Array(-85.9102, 2.64542, 91.2178, 3.73376, 99.3475, 20.6292, -95.1094, 21.4349)
+1:12/size_in_atlas = Vector2i(5, 2)
+1:12/0 = 0
+1:12/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+1:12/0/physics_layer_0/angular_velocity = 0.0
+1:12/0/physics_layer_0/polygon_0/points = PackedVector2Array(-58.6941, 2.81264, 61.156, 3.54905, 71.7709, 20.7434, -66.8255, 21.3177)
+1:14/size_in_atlas = Vector2i(3, 2)
+1:14/0 = 0
+1:14/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+1:14/0/physics_layer_0/angular_velocity = 0.0
+1:14/0/physics_layer_0/polygon_0/points = PackedVector2Array(-27.5717, 3.00387, 31.8339, 3.36888, 35.3452, 20.8944, -32.5183, 21.1756)
+9:10/size_in_atlas = Vector2i(7, 4)
+9:10/0 = 0
+9:10/0/physics_layer_0/linear_velocity = Vector2(2.08165e-12, 2.08165e-12)
+9:10/0/physics_layer_0/angular_velocity = 0.0
+9:10/0/physics_layer_0/polygon_0/points = PackedVector2Array(-91.5745, -32.3868, 91.928, -33.7381, 91.2168, 57.9827, -88.7528, 56.785)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cctvg"]
+resource_name = "pipes"
+texture = ExtResource("2_uyeux")
+texture_region_size = Vector2i(60, 20)
+0:0/size_in_atlas = Vector2i(1, 25)
+0:0/next_alternative_id = 3
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/1 = 1
+0:0/1/flip_h = true
+0:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/1/physics_layer_0/angular_velocity = 0.0
+1:0/size_in_atlas = Vector2i(1, 22)
+1:0/next_alternative_id = 3
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/2 = 2
+1:0/2/flip_h = true
+1:0/2/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/2/physics_layer_0/angular_velocity = 0.0
+2:0/size_in_atlas = Vector2i(1, 19)
+2:0/next_alternative_id = 2
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+2:0/1 = 1
+2:0/1/flip_h = true
+2:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/1/physics_layer_0/angular_velocity = 0.0
+3:0/size_in_atlas = Vector2i(1, 16)
+3:0/next_alternative_id = 2
+3:0/0 = 0
+3:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:0/0/physics_layer_0/angular_velocity = 0.0
+3:0/1 = 1
+3:0/1/flip_h = true
+3:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:0/1/physics_layer_0/angular_velocity = 0.0
+4:0/size_in_atlas = Vector2i(1, 13)
+4:0/next_alternative_id = 2
+4:0/0 = 0
+4:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+4:0/0/physics_layer_0/angular_velocity = 0.0
+4:0/1 = 1
+4:0/1/flip_h = true
+4:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+4:0/1/physics_layer_0/angular_velocity = 0.0
+5:0/size_in_atlas = Vector2i(1, 10)
+5:0/next_alternative_id = 2
+5:0/0 = 0
+5:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+5:0/0/physics_layer_0/angular_velocity = 0.0
+5:0/1 = 1
+5:0/1/flip_h = true
+5:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+5:0/1/physics_layer_0/angular_velocity = 0.0
+6:0/size_in_atlas = Vector2i(1, 7)
+6:0/next_alternative_id = 2
+6:0/0 = 0
+6:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+6:0/0/physics_layer_0/angular_velocity = 0.0
+6:0/1 = 1
+6:0/1/flip_h = true
+6:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+6:0/1/physics_layer_0/angular_velocity = 0.0
+7:0/size_in_atlas = Vector2i(1, 4)
+7:0/next_alternative_id = 2
+7:0/0 = 0
+7:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+7:0/0/physics_layer_0/angular_velocity = 0.0
+7:0/1 = 1
+7:0/1/flip_h = true
+7:0/1/physics_layer_0/linear_velocity = Vector2(0, 0)
+7:0/1/physics_layer_0/angular_velocity = 0.0
+
+[sub_resource type="TileSet" id="TileSet_5g371"]
+tile_size = Vector2i(30, 30)
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 126
+sources/0 = SubResource("TileSetAtlasSource_f48e1")
+sources/1 = SubResource("TileSetAtlasSource_cctvg")
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5uxdd"]
+distance = -50.0
+
+[node name="Level" type="Node2D"]
+metadata/_edit_vertical_guides_ = [-400.0, 1570.0]
+metadata/_edit_horizontal_guides_ = [960.0, -25.0]
+
+[node name="Enemies" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="EnemyBrute0" parent="Enemies" instance=ExtResource("1_qwdar")]
+position = Vector2(-166, 822)
+
+[node name="Ground" type="Node2D" parent="."]
+
+[node name="TileMap" type="TileMap" parent="Ground"]
+rotation = -0.00015828
+tile_set = SubResource("TileSet_5g371")
+format = 2
+layer_0/name = "back_pipe"
+layer_0/z_index = -2
+layer_0/tile_data = PackedInt32Array(1572874, 262145, 65536, 1703956, 327681, 65536)
+layer_1/name = "floor"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = -1
+layer_1/tile_data = PackedInt32Array(1835010, 720896, 0, 1835015, 589824, 10, 1835029, 65536, 0, 1835036, 589824, 10, 1572878, 65536, 4, 1245191, 65536, 0, 1245199, 327680, 4, 1245205, 589824, 10, 1245215, 589824, 4, 1900537, 589824, 10, 1769459, 327680, 4, 2031617, 65536, 4, 2031622, 720896, 0, 2031619, 327680, 4, 2031625, 327680, 4, 2031634, 327680, 4, 2031638, 589824, 4, 2031645, 720896, 0, 2031642, 327680, 4, 2097145, 589824, 4, 1966064, 65536, 0)
+layer_2/name = "platform"
+layer_2/enabled = true
+layer_2/modulate = Color(1, 1, 1, 1)
+layer_2/y_sort_enabled = false
+layer_2/y_sort_origin = 0
+layer_2/z_index = 0
+layer_2/tile_data = PackedInt32Array(1835023, 65536, 12, 1572874, 65536, 10, 1507347, 65536, 8, 1245201, 65536, 14, 1507362, 65536, 12)
+layer_3/name = "front_pipe"
+layer_3/enabled = true
+layer_3/modulate = Color(1, 1, 1, 1)
+layer_3/y_sort_enabled = false
+layer_3/y_sort_origin = 0
+layer_3/z_index = 2
+layer_3/tile_data = PackedInt32Array(1572871, 262145, 0, 1572895, 262145, 65536, 720920, 1, 65536, 1703954, 327681, 0, 1572868, 196609, 0)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Background" type="Sprite2D" parent="ParallaxBackground"]
+light_mask = 2
+visibility_layer = 32768
+position = Vector2(593, 468)
+texture = ExtResource("3_eu73s")
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="." instance=ExtResource("4_ot77c")]
+z_index = 1
+position = Vector2(57, 757)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(8.3331, -441.667)
+scale = Vector2(8.33333, 8.33333)
+zoom = Vector2(2, 2)
+limit_left = -400
+limit_top = -25
+limit_right = 1570
+limit_bottom = 960
+position_smoothing_enabled = true
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="DeathFloor" type="Area2D" parent="Hazards"]
+position = Vector2(-418, 921)
+script = ExtResource("6_bqcdr")
+
+[node name="DeathFloorCollisionShape2D" type="CollisionShape2D" parent="Hazards/DeathFloor"]
+shape = SubResource("WorldBoundaryShape2D_5uxdd")
+debug_color = Color(0.976471, 0, 0.403922, 0.419608)
+
+[node name="Spike0" parent="Hazards" instance=ExtResource("5_geybd")]
+z_index = -2
+position = Vector2(596, 820)
+
+[node name="Spike1" parent="Hazards" instance=ExtResource("5_geybd")]
+z_index = -2
+position = Vector2(1016, 550)
+
+[node name="Spike2" parent="Hazards" instance=ExtResource("5_geybd")]
+z_index = -2
+position = Vector2(970, 550)
+
+[node name="Spike3" parent="Hazards" instance=ExtResource("5_geybd")]
+z_index = -2
+position = Vector2(-373, 761)
+
+[node name="Objects" type="Node2D" parent="."]
+
+[node name="PillowStack" parent="Objects" instance=ExtResource("8_mfova")]
+position = Vector2(66, 655)

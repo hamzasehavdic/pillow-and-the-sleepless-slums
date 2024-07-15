@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwrt2lrbx60gr"]
+
+[ext_resource type="PackedScene" uid="uid://ce7ey4t4i1xct" path="res://scenes/player/player.tscn" id="1_fmf6t"]
+[ext_resource type="PackedScene" uid="uid://bqk5tkubej45k" path="res://scenes/enemies/enemy_brute.tscn" id="3_42pri"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf5pv"]
+size = Vector2(202, 64)
+
+[node name="PhysicsPlayground" type="Node2D"]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(43, 443)
+collision_mask = 19
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(-30, 22)
+shape = SubResource("RectangleShape2D_cf5pv")
+debug_color = Color(0, 0.639216, 0.352941, 0.419608)
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="." instance=ExtResource("1_fmf6t")]
+z_index = 1
+position = Vector2(-23, 214)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(8.3331, -441.667)
+scale = Vector2(8.33333, 8.33333)
+zoom = Vector2(3, 3)
+limit_left = -400
+limit_top = -25
+limit_right = 1570
+limit_bottom = 960
+position_smoothing_enabled = true
+
+[node name="EnemyBrute" parent="." instance=ExtResource("3_42pri")]
+position = Vector2(-62, 414)

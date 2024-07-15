@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3htse2wphw1g"]
+
+[ext_resource type="Texture2D" uid="uid://c77v6rbmjvao3" path="res://assets/graphics/objects/pillow_stack.png" id="1_gvjp0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j74tv"]
+size = Vector2(246, 263)
+
+[node name="RigidBody2D" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 19
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -17)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_gvjp0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-4.76837e-07, -15)
+scale = Vector2(0.1, 0.1)
+shape = SubResource("RectangleShape2D_j74tv")

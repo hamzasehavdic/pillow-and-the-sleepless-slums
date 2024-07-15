@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqk5tkubej45k"]
+
+[ext_resource type="Script" path="res://scenes/enemies/enemy_brute.gd" id="1_ppn5b"]
+[ext_resource type="Texture2D" uid="uid://hhtqcr1405ir" path="res://assets/graphics/enemies/En_Brute-Body.png" id="2_3xw68"]
+[ext_resource type="PackedScene" uid="uid://bckhoeuvjc28a" path="res://scenes/enemies/enemy_brute_arm.tscn" id="3_8id8y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rbgic"]
+size = Vector2(37, 82)
+
+[node name="EnemyBrute" type="CharacterBody2D"]
+collision_layer = 16
+collision_mask = 33
+script = ExtResource("1_ppn5b")
+metadata/_edit_lock_ = true
+
+[node name="LBruteArm" parent="." instance=ExtResource("3_8id8y")]
+position = Vector2(-20, -77)
+arm_rotation_deg = 90.0
+
+[node name="RBruteArm" parent="." instance=ExtResource("3_8id8y")]
+position = Vector2(20, -78)
+arm_rotation_deg = -90.0
+
+[node name="BodySprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -60)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_3xw68")
+metadata/_edit_lock_ = true
+
+[node name="SightRayCast2D" type="RayCast2D" parent="."]
+position = Vector2(2.08165e-12, -100)
+target_position = Vector2(37, 112)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -43)
+shape = SubResource("RectangleShape2D_rbgic")
+debug_color = Color(0.654902, 0.517647, 0, 0.419608)

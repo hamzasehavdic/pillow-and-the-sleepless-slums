@@ -10,14 +10,14 @@ config_version=5
 
 [application]
 
-config/name="Sidescroller Template"
-run/main_scene="res://scenes/main.tscn"
+config/name="Pillow and The Sleepless Slums"
+run/main_scene="res://scenes/levels/level_template.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://scripts/game_manager.gd"
+GameManager="*res://scenes/globals/game_manager.gd"
 
 [debug]
 
@@ -77,7 +77,7 @@ interact={
 2d_physics/layer_3="Item"
 2d_physics/layer_4="NPC"
 2d_physics/layer_5="Enemy"
-2d_physics/layer_6="Transition"
+2d_physics/layer_6="Hazard"
 
 [rendering]
 
